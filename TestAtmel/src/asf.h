@@ -74,6 +74,9 @@
 // From module: Generic board support
 #include <board.h>
 
+// From module: IOPORT - General purpose I/O service
+#include <ioport.h>
+
 // From module: Interrupt management - UC3 implementation
 #include <interrupt.h>
 
@@ -82,5 +85,11 @@
 
 // From module: System Clock Control - UC3 A implementation
 #include <sysclk.h>
+
+// From module: USART - Serial interface - UC3 implementation
+#include <serial.h>
+
+// From module: USART - Universal Synchronous/Asynchronous Receiver/Transmitter
+#include <usart.h>
 
 #endif // ASF_H

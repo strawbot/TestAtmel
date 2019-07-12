@@ -43,12 +43,30 @@ void init() {
 	redOff();
 }
 
+#define USART_SERIAL                     &USARTD0
+#define USART_SERIAL_BAUDRATE            115200
+#define USART_SERIAL_CHAR_LENGTH         US_MR_CHRL_8_BIT
+#define USART_SERIAL_PARITY              US_MR_PAR_NO
+#define USART_SERIAL_STOP_BIT            false
+
+static usart_serial_options_t usart_options = {
+	.baudrate = USART_SERIAL_BAUDRATE,
+	.charlength = USART_SERIAL_CHAR_LENGTH,
+	.paritytype = USART_SERIAL_PARITY,
+	.stopbits = USART_SERIAL_STOP_BIT
+};
+
 int main (void)
 {
 	/* Insert system clock initialization code here (sysclk_init()). */
 
 	board_init();
 	init();
+	usart_serial_init(USART_SERIAL, &usart_options);
+
+	const char * banner = "Good Mornin!";
+	while (*banner) usart_serial_putchar(USART_SERIAL, *banner++);
+	
 	while(1) {
 		 // uart1 input LED on
 		greenOn(); // uart1 input LED off
