@@ -42,18 +42,44 @@ void init() {
 	greenOff();
 	redOff();
 }
+/*	static const gpio_map_t USART_GPIO_MAP =
+	{
+		{EXAMPLE_USART_RX_PIN, EXAMPLE_USART_RX_FUNCTION},
+		{EXAMPLE_USART_TX_PIN, EXAMPLE_USART_TX_FUNCTION}
+	};
 
-#define USART_SERIAL                     &USARTD0
-#define USART_SERIAL_BAUDRATE            115200
-#define USART_SERIAL_CHAR_LENGTH         US_MR_CHRL_8_BIT
-#define USART_SERIAL_PARITY              US_MR_PAR_NO
-#define USART_SERIAL_STOP_BIT            false
+	// USART options.
+	static const usart_options_t USART_OPTIONS =
+	{
+		.baudrate     = 57600,
+		.charlength   = 8,
+		.paritytype   = USART_NO_PARITY,
+		.stopbits     = USART_1_STOPBIT,
+		.channelmode  = USART_NORMAL_CHMODE
+	};
+
+	// Assign GPIO to USART.
+	gpio_enable_module(USART_GPIO_MAP,
+	sizeof(USART_GPIO_MAP) / sizeof(USART_GPIO_MAP[0]));
+
+	// Initialize USART in RS232 mode.
+	usart_init_rs232(EXAMPLE_USART, &USART_OPTIONS, EXAMPLE_TARGET_PBACLK_FREQ_HZ);
+
+	// Hello world!
+	usart_write_line(EXAMPLE_USART, "Hello, this is the AVR UC3 MCU saying hello! (press enter)\r\n");
+
+	// Press enter to continue.
+	while (usart_get_echo_line(EXAMPLE_USART) == USART_FAILURE);  // Get and echo characters until end of line.
+
+	usart_write_line(EXAMPLE_USART, "Goodbye.\r\n"); */
+
+#define USART_SERIAL                     &AVR32_USART1
 
 static usart_serial_options_t usart_options = {
-	.baudrate = USART_SERIAL_BAUDRATE,
-	.charlength = USART_SERIAL_CHAR_LENGTH,
-	.paritytype = USART_SERIAL_PARITY,
-	.stopbits = USART_SERIAL_STOP_BIT
+	.baudrate = 115200,
+	.charlength = 8,
+	.paritytype = USART_NO_PARITY,
+	.stopbits = USART_1_STOPBIT
 };
 
 int main (void)
