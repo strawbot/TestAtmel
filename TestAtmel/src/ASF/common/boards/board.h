@@ -1,450 +1,186 @@
 /**
  * \file
  *
- * \brief Standard board header file.
+ * \brief User board definition template
  *
- * This file includes the appropriate board header file according to the
- * defined board (parameter BOARD).
+ * ALERT2 AVR32 Version3 Board Definition.
  *
- * Copyright (c) 2009-2018 Microchip Technology Inc. and its subsidiaries.
- *
- * \asf_license_start
- *
- * \page License
- *
- * Subject to your compliance with these terms, you may use Microchip
- * software and any derivatives exclusively with Microchip products.
- * It is your responsibility to comply with third party license terms applicable
- * to your use of third party software (including open source software) that
- * may accompany Microchip software.
- *
- * THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS". NO WARRANTIES,
- * WHETHER EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS SOFTWARE,
- * INCLUDING ANY IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY,
- * AND FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL MICROCHIP BE
- * LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE, INCIDENTAL OR CONSEQUENTIAL
- * LOSS, DAMAGE, COST OR EXPENSE OF ANY KIND WHATSOEVER RELATED TO THE
- * SOFTWARE, HOWEVER CAUSED, EVEN IF MICROCHIP HAS BEEN ADVISED OF THE
- * POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.  TO THE FULLEST EXTENT
- * ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN ANY WAY
- * RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
- * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
- *
- * \asf_license_stop
- *
- */
-/*
- * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
+ * Copyright 2008, 2009, 2011 Blue Water Design LLC.
+ * rcroark@bluewaterdesign.us
+ * 
+ * May 2011 - fixed the mapping for:
+ * 			#define RTCMEM_SPI_MISO	 AVR32_PIN_PA17
+ * 			#define RTCMEM_SPI_SCK	AVR32_PIN_PA15
+ * 			- removed the SW1 - SW4 pins, boards do not have SW1-SW4
+ * Sept 2009 - Created for Version3 Hardware
+ * 
+ * THIS SOFTWARE IS PROVIDED BY BLUE WATER DESIGN LLC ``AS IS'' AND ANY EXPRESS
+ * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT ARE 
+ * EXPRESSLY AND SPECIFICALLY DISCLAIMED.  IN NO EVENT SHALL BLUE WATER 
+ * DESIGN LLC BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, 
+ * OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ * POSSIBILITY OF SUCH DAMAGE.
+ * 
+ * The "ALERT2 AVR32 Version3 Board Definition" is distributed in the hope
+ * it will be useful, but WITHOUT ANY WARRANTY. 
  */
 
-#ifndef _BOARD_H_
-#define _BOARD_H_
+#ifndef USER_BOARD_H
+#define USER_BOARD_H
 
-/**
- * \defgroup group_common_boards Generic board support
- *
- * The generic board support module includes board-specific definitions
- * and function prototypes, such as the board initialization function.
- *
- * \{
- */
-
-#include "compiler.h"
-
-#ifdef __cplusplus
-extern "C" {
+#define CSI			//include CSI specific code
+#ifdef CSI
+#include "CSI_A200.h"
 #endif
 
-
-/*! \name Base Boards
- */
-//! @{
-#define EVK1100                     1  //!< AT32UC3A EVK1100 board.
-#define EVK1101                     2  //!< AT32UC3B EVK1101 board.
-#define UC3C_EK                     3  //!< AT32UC3C UC3C-EK board.
-#define EVK1104                     4  //!< AT32UC3A3 EVK1104 board.
-#define EVK1105                     5  //!< AT32UC3A EVK1105 board.
-#define STK600_RCUC3L0              6  //!< STK600 RCUC3L0 board.
-#define UC3L_EK                     7  //!< AT32UC3L-EK board.
-#define XPLAIN                      8  //!< ATxmega128A1 Xplain board.
-#define STK600_RC064X              10  //!< ATxmega256A3 STK600 board.
-#define STK600_RC100X              11  //!< ATxmega128A1 STK600 board.
-#define UC3_A3_XPLAINED            13  //!< ATUC3A3 UC3-A3 Xplained board.
-#define UC3_L0_XPLAINED            15  //!< ATUC3L0 UC3-L0 Xplained board.
-#define STK600_RCUC3D              16  //!< STK600 RCUC3D board.
-#define STK600_RCUC3C0             17  //!< STK600 RCUC3C board.
-#define XMEGA_B1_XPLAINED          18  //!< ATxmega128B1 Xplained board.
-#define XMEGA_A1_XPLAINED          19  //!< ATxmega128A1 Xplain-A1 board.
-#define XMEGA_A1U_XPLAINED_PRO     20  //!< ATxmega128A1U XMEGA-A1U Xplained Pro board.
-#define STK600_RCUC3L4             21  //!< ATUCL4 STK600 board.
-#define UC3_L0_XPLAINED_BC         22  //!< ATUC3L0 UC3-L0 Xplained board controller board.
-#define MEGA1284P_XPLAINED_BC      23  //!< ATmega1284P-Xplained board controller board.
-#define STK600_RC044X              24  //!< STK600 with RC044X routing card board.
-#define STK600_RCUC3B0             25  //!< STK600 RCUC3B0 board.
-#define UC3_L0_QT600               26  //!< QT600 UC3L0 MCU board.
-#define XMEGA_A3BU_XPLAINED        27  //!< ATxmega256A3BU Xplained board.
-#define STK600_RC064X_LCDX         28  //!< XMEGAB3 STK600 RC064X LCDX board.
-#define STK600_RC100X_LCDX         29  //!< XMEGAB1 STK600 RC100X LCDX board.
-#define UC3B_BOARD_CONTROLLER      30  //!< AT32UC3B1 board controller for Atmel boards.
-#define RZ600                      31  //!< AT32UC3A RZ600 MCU board.
-#define SAM3S_EK                   32  //!< SAM3S-EK board.
-#define SAM3U_EK                   33  //!< SAM3U-EK board.
-#define SAM3X_EK                   34  //!< SAM3X-EK board.
-#define SAM3N_EK                   35  //!< SAM3N-EK board.
-#define SAM3S_EK2                  36  //!< SAM3S-EK2 board.
-#define SAM4S_EK                   37  //!< SAM4S-EK board.
-#define STK600_RCUC3A0             38  //!< STK600 RCUC3A0 board.
-#define STK600_MEGA                39  //!< STK600 MEGA board.
-#define MEGA_1284P_XPLAINED        40  //!< ATmega1284P Xplained board.
-#define SAM4S_XPLAINED             41  //!< SAM4S Xplained board.
-#define ATXMEGA128A1_QT600         42  //!< QT600 ATXMEGA128A1 MCU board.
-#define ARDUINO_DUE_X              43  //!< Arduino Due/X board.
-#define STK600_RCUC3L3             44  //!< ATUCL3 STK600 board.
-#define SAM4L_EK                   45  //!< SAM4L-EK board.
-#define STK600_MEGA_RF             46  //!< STK600 MEGA RF EVK board.
-#define XMEGA_C3_XPLAINED          47  //!< ATxmega384C3 Xplained board.
-#define STK600_RC032X              48  //!< STK600 with RC032X routing card board.
-#define SAM4S_EK2                  49  //!< SAM4S-EK2 board.
-#define XMEGA_E5_XPLAINED          50  //!< ATxmega32E5 Xplained board.
-#define SAM4E_EK                   51  //!< SAM4E-EK board.
-#define ATMEGA256RFR2_XPLAINED_PRO 52  //!< ATmega256RFR2 Xplained Pro board.
-#define SAM4S_XPLAINED_PRO         53  //!< SAM4S Xplained Pro board.
-#define SAM4L_XPLAINED_PRO         54  //!< SAM4L Xplained Pro board.
-#define ATMEGA256RFR2_ZIGBIT       55  //!< ATmega256RFR2 zigbit.
-#define XMEGA_RF233_ZIGBIT         56  //!< ATxmega256A3U with AT86RF233 Zigbit.
-#define XMEGA_RF212B_ZIGBIT        57  //!< ATxmega256A3U with AT86RF212B Zigbit.
-#define SAM4S_WPIR_RD              58  //!< SAM4S-WPIR-RD board.
-#define SAMD20_XPLAINED_PRO        59  //!< SAM D20 Xplained Pro board.
-#define SAM4L8_XPLAINED_PRO        60  //!< SAM4L8 Xplained Pro board.
-#define SAM4N_XPLAINED_PRO         61  //!< SAM4N Xplained Pro board.
-#define XMEGA_A3_REB_CBB           62  //!< XMEGA REB Controller Base board.
-#define ATMEGARFX_RCB              63  //!< RFR2 & RFA1 RCB.
-#define SAM4C_EK                   64  //!< SAM4C-EK board.
-#define RCB256RFR2_XPRO            65  //!< RFR2 RCB Xplained Pro board.
-#define SAMG53_XPLAINED_PRO        66  //!< SAMG53 Xplained Pro board.
-#define SAM4CP16BMB                67  //!< SAM4CP16BMB board.
-#define SAM4E_XPLAINED_PRO         68  //!< SAM4E Xplained Pro board.
-#define SAMD21_XPLAINED_PRO        69  //!< SAM D21 Xplained Pro board.
-#define SAMR21_XPLAINED_PRO        70  //!< SAM R21 Xplained Pro board.
-#define SAM4CMP_DB                 71  //!< SAM4CMP demo board.
-#define SAM4CMS_DB                 72  //!< SAM4CMS demo board.
-#define ATPL230AMB                 73  //!< ATPL230AMB board.
-#define SAMD11_XPLAINED_PRO        74  //!< SAM D11 Xplained Pro board.
-#define SAMG55_XPLAINED_PRO        75  //!< SAMG55 Xplained Pro board.
-#define SAML21_XPLAINED_PRO        76  //!< SAM L21 Xplained Pro board.
-#define SAMD10_XPLAINED_MINI       77  //!< SAM D10 Xplained Mini board.
-#define SAMDA1_XPLAINED_PRO        78  //!< SAM DA1 Xplained Pro board.
-#define SAMW25_XPLAINED_PRO        79  //!< SAMW25 Xplained Pro board.
-#define SAMC21_XPLAINED_PRO        80  //!< SAM C21 Xplained Pro board.
-#define SAMV71_XPLAINED_ULTRA      81  //!< SAMV71 Xplained Ultra board.
-#define ATMEGA328P_XPLAINED_MINI   82  //!< ATMEGA328P Xplained MINI board.
-#define ATMEGA328PB_XPLAINED_MINI  83  //!< ATMEGA328PB Xplained MINI board.
-#define SAMB11_XPLAINED_PRO        84  //!< SAM B11 Xplained Pro board.
-#define SAME70_XPLAINED            85  //!< SAME70 Xplained board.
-#define SAML22_XPLAINED_PRO        86  //!< SAM L22 Xplained Pro board.
-#define SAML22_XPLAINED_PRO_B      87  //!< SAM L22 Xplained Pro board.
-#define SAMR21ZLL_EK               88  //!< SAMR21ZLL-EK board.
-#define ATMEGA168PB_XPLAINED_MINI  89  //!< ATMEGA168PB Xplained MINI board.
-#define ATMEGA324PB_XPLAINED_PRO   90  //!< ATMEGA324PB Xplained Pro board.
-#define SAMB11ZR_XPLAINED_PRO      92  //!< SAM B11 ZR Xplained Pro board.
-#define SAMR30_XPLAINED_PRO        93  //!< SAM R30 Xplained Pro board.
-#define SAMHA1G16A_XPLAINED_PRO    94  //!< SAM HA1G16A Xplained Pro board.
-#define SAMR34_XPLAINED_PRO        95  //!< SAM R34 Xplained Pro board.
-#define SIMULATOR_XMEGA_A1         97  //!< Simulator for XMEGA A1 devices.
-#define AVR_SIMULATOR_UC3          98  //!< Simulator for the AVR UC3 device family.
-#define USER_BOARD                 99  //!< User-reserved board (if any).
-#define DUMMY_BOARD                100 //!< Dummy board to support board-independent applications (e.g. bootloader).
-#define SAMB11ZR_SENSOR_TAG        101 //!< SAMB11ZR sensor tag board
-#define SAMR30_MODULE_XPLAINED_PRO 102 //!< SAM R30 Module Xplained Pro board.
-#define SAMR21G18_MODULE           103 //!< SAMR21G18-MR210UA Module.
-#define SAMR21B18_MODULE           104 //!< SAMR21B18-MZ210PA Module.
-//! @}
-
-/*! \name Extension Boards
- */
-//! @{
-#define EXT1102                      1  //!< AT32UC3B EXT1102 board
-#define MC300                        2  //!< AT32UC3 MC300 board
-#define SENSORS_XPLAINED_INERTIAL_1  3  //!< Xplained inertial sensor board 1
-#define SENSORS_XPLAINED_INERTIAL_2  4  //!< Xplained inertial sensor board 2
-#define SENSORS_XPLAINED_PRESSURE_1  5  //!< Xplained pressure sensor board
-#define SENSORS_XPLAINED_LIGHTPROX_1 6  //!< Xplained light & proximity sensor board
-#define SENSORS_XPLAINED_INERTIAL_A1 7  //!< Xplained inertial sensor board "A"
-#define RZ600_AT86RF231              8  //!< AT86RF231 RF board in RZ600
-#define RZ600_AT86RF230B             9  //!< AT86RF230B RF board in RZ600
-#define RZ600_AT86RF212             10  //!< AT86RF212 RF board in RZ600
-#define SENSORS_XPLAINED_BREADBOARD 11  //!< Xplained sensor development breadboard
-#define SECURITY_XPLAINED           12  //!< Xplained ATSHA204 board
-#define USER_EXT_BOARD              99  //!< User-reserved extension board (if any).
-//! @}
-
-#if BOARD == EVK1100
-#  include "evk1100/evk1100.h"
-#elif BOARD == EVK1101
-#  include "evk1101/evk1101.h"
-#elif BOARD == UC3C_EK
-#  include "uc3c_ek/uc3c_ek.h"
-#elif BOARD == EVK1104
-#  include "evk1104/evk1104.h"
-#elif BOARD == EVK1105
-#  include "evk1105/evk1105.h"
-#elif BOARD == STK600_RCUC3L0
-#  include "stk600/rcuc3l0/stk600_rcuc3l0.h"
-#elif BOARD == UC3L_EK
-#  include "uc3l_ek/uc3l_ek.h"
-#elif BOARD == STK600_RCUC3L4
-#  include "stk600/rcuc3l4/stk600_rcuc3l4.h"
-#elif BOARD == XPLAIN
-#  include "xplain/xplain.h"
-#elif BOARD == STK600_MEGA
-  /*No header-file to include*/
-#elif BOARD == STK600_MEGA_RF
-#  include "stk600.h"
-#elif BOARD == ATMEGA256RFR2_XPLAINED_PRO
-#  include "atmega256rfr2_xplained_pro/atmega256rfr2_xplained_pro.h"
-#elif BOARD == ATMEGA256RFR2_ZIGBIT
-#  include "atmega256rfr2_zigbit/atmega256rfr2_zigbit.h"
-#elif BOARD == STK600_RC032X
-#  include "stk600/rc032x/stk600_rc032x.h"
-#elif BOARD == STK600_RC044X
-#  include "stk600/rc044x/stk600_rc044x.h"
-#elif BOARD == STK600_RC064X
-#  include "stk600/rc064x/stk600_rc064x.h"
-#elif BOARD == STK600_RC100X
-#  include "stk600/rc100x/stk600_rc100x.h"
-#elif BOARD == UC3_A3_XPLAINED
-#  include "uc3_a3_xplained/uc3_a3_xplained.h"
-#elif BOARD == UC3_L0_XPLAINED
-#  include "uc3_l0_xplained/uc3_l0_xplained.h"
-#elif BOARD == STK600_RCUC3B0
-#  include "stk600/rcuc3b0/stk600_rcuc3b0.h"
-#elif BOARD == STK600_RCUC3D
-#  include "stk600/rcuc3d/stk600_rcuc3d.h"
-#elif BOARD == STK600_RCUC3C0
-#  include "stk600/rcuc3c0/stk600_rcuc3c0.h"
-#elif BOARD == SAMG53_XPLAINED_PRO
-#  include "samg53_xplained_pro/samg53_xplained_pro.h"
-#elif BOARD == SAMG55_XPLAINED_PRO
-#  include "samg55_xplained_pro/samg55_xplained_pro.h"
-#elif BOARD == XMEGA_B1_XPLAINED
-#  include "xmega_b1_xplained/xmega_b1_xplained.h"
-#elif BOARD == STK600_RC064X_LCDX
-#  include "stk600/rc064x_lcdx/stk600_rc064x_lcdx.h"
-#elif BOARD == STK600_RC100X_LCDX
-#  include "stk600/rc100x_lcdx/stk600_rc100x_lcdx.h"
-#elif BOARD == XMEGA_A1_XPLAINED
-#  include "xmega_a1_xplained/xmega_a1_xplained.h"
-#elif BOARD == XMEGA_A1U_XPLAINED_PRO
-#  include "xmega_a1u_xplained_pro/xmega_a1u_xplained_pro.h"
-#elif BOARD == UC3_L0_XPLAINED_BC
-#  include "uc3_l0_xplained_bc/uc3_l0_xplained_bc.h"
-#elif BOARD == SAM3S_EK
-#  include "sam3s_ek/sam3s_ek.h"
-#  include "system_sam3s.h"
-#elif BOARD == SAM3S_EK2
-#  include "sam3s_ek2/sam3s_ek2.h"
-#  include "system_sam3sd8.h"
-#elif BOARD == SAM3U_EK
-#  include "sam3u_ek/sam3u_ek.h"
-#  include "system_sam3u.h"
-#elif BOARD == SAM3X_EK
-#  include "sam3x_ek/sam3x_ek.h"
-#  include "system_sam3x.h"
-#elif BOARD == SAM3N_EK
-#  include "sam3n_ek/sam3n_ek.h"
-#  include "system_sam3n.h"
-#elif BOARD == SAM4S_EK
-#  include "sam4s_ek/sam4s_ek.h"
-#  include "system_sam4s.h"
-#elif BOARD == SAM4S_WPIR_RD
-#  include "sam4s_wpir_rd/sam4s_wpir_rd.h"
-#  include "system_sam4s.h"
-#elif BOARD == SAM4S_XPLAINED
-#  include "sam4s_xplained/sam4s_xplained.h"
-#  include "system_sam4s.h"
-#elif BOARD == SAM4S_EK2
-#  include "sam4s_ek2/sam4s_ek2.h"
-#  include "system_sam4s.h"
-#elif BOARD == MEGA_1284P_XPLAINED
-  /*No header-file to include*/
-#elif BOARD == ARDUINO_DUE_X
-#  include "arduino_due_x/arduino_due_x.h"
-#  include "system_sam3x.h"
-#elif BOARD == SAM4L_EK
-#  include "sam4l_ek/sam4l_ek.h"
-#elif BOARD == SAM4E_EK
-#  include "sam4e_ek/sam4e_ek.h"
-#elif BOARD == SAMD20_XPLAINED_PRO
-#  include "samd20_xplained_pro/samd20_xplained_pro.h"
-#elif BOARD == SAMD21_XPLAINED_PRO
-#  include "samd21_xplained_pro/samd21_xplained_pro.h"
-#elif BOARD == SAMR21_XPLAINED_PRO
-#  include "samr21_xplained_pro/samr21_xplained_pro.h"
-#elif BOARD == SAMR30_XPLAINED_PRO && defined(__SAMR30G18A__)
-#  include "samr30_xplained_pro/samr30_xplained_pro.h"
-#elif BOARD == SAMR30_MODULE_XPLAINED_PRO && defined(__SAMR30E18A__)
-#  include "samr30_module_xplained_pro/samr30_module_xplained_pro.h"
-#elif BOARD == SAMR21ZLL_EK
-#  include "samr21zll_ek/samr21zll_ek.h"
-#elif BOARD == SAMD11_XPLAINED_PRO
-#  include "samd11_xplained_pro/samd11_xplained_pro.h"
-#elif BOARD == SAML21_XPLAINED_PRO && defined(__SAML21J18A__)
-#  include "saml21_xplained_pro/saml21_xplained_pro.h"
-#elif BOARD == SAML22_XPLAINED_PRO
-#  include "saml22_xplained_pro/saml22_xplained_pro.h"
-#elif BOARD == SAML22_XPLAINED_PRO_B
-#  include "saml22_xplained_pro_b/saml22_xplained_pro_b.h"
-#elif BOARD == SAML21_XPLAINED_PRO && defined(__SAML21J18B__)
-#  include "saml21_xplained_pro_b/saml21_xplained_pro.h"
-#elif BOARD == SAMD10_XPLAINED_MINI
-#  include "samd10_xplained_mini/samd10_xplained_mini.h"
-#elif BOARD == SAMDA1_XPLAINED_PRO
-#  include "samda1_xplained_pro/samda1_xplained_pro.h"
-#elif BOARD == SAMHA1G16A_XPLAINED_PRO
-#  include "samha1g16a_xplained_pro/samha1g16a_xplained_pro.h"
-#elif BOARD == SAMC21_XPLAINED_PRO
-#  include "samc21_xplained_pro/samc21_xplained_pro.h"
-#elif BOARD == SAM4N_XPLAINED_PRO
-#  include "sam4n_xplained_pro/sam4n_xplained_pro.h"
-#elif BOARD == SAMW25_XPLAINED_PRO
-#  include "samw25_xplained_pro/samw25_xplained_pro.h"
-#elif BOARD == SAMV71_XPLAINED_ULTRA
-#  include "samv71_xplained_ultra/samv71_xplained_ultra.h"
-#elif BOARD == MEGA1284P_XPLAINED_BC
-#  include "mega1284p_xplained_bc/mega1284p_xplained_bc.h"
-#elif BOARD == UC3_L0_QT600
-#  include "uc3_l0_qt600/uc3_l0_qt600.h"
-#elif BOARD == XMEGA_A3BU_XPLAINED
-#  include "xmega_a3bu_xplained/xmega_a3bu_xplained.h"
-#elif BOARD == XMEGA_E5_XPLAINED
-#  include "xmega_e5_xplained/xmega_e5_xplained.h"
-#elif BOARD == UC3B_BOARD_CONTROLLER
-#  include "uc3b_board_controller/uc3b_board_controller.h"
-#elif BOARD == RZ600
-#  include "rz600/rz600.h"
-#elif BOARD == STK600_RCUC3A0
-#  include "stk600/rcuc3a0/stk600_rcuc3a0.h"
-#elif BOARD == ATXMEGA128A1_QT600
-#  include "atxmega128a1_qt600/atxmega128a1_qt600.h"
-#elif BOARD == STK600_RCUC3L3
-#  include "stk600/rcuc3l3/stk600_rcuc3l3.h"
-#elif BOARD == SAM4S_XPLAINED_PRO
-#  include "sam4s_xplained_pro/sam4s_xplained_pro.h"
-#elif BOARD == SAM4L_XPLAINED_PRO
-#  include "sam4l_xplained_pro/sam4l_xplained_pro.h"
-#elif BOARD == SAM4L8_XPLAINED_PRO
-#  include "sam4l8_xplained_pro/sam4l8_xplained_pro.h"
-#elif BOARD == SAM4C_EK
-#  include "sam4c_ek/sam4c_ek.h"
-#elif BOARD == SAM4CMP_DB
-#  include "sam4cmp_db/sam4cmp_db.h"
-#elif BOARD == SAM4CMS_DB
-#  include "sam4cms_db/sam4cms_db.h"
-#elif BOARD == SAM4CP16BMB
-#  include "sam4cp16bmb/sam4cp16bmb.h"
-#elif BOARD == ATPL230AMB
-#  include "atpl230amb/atpl230amb.h"
-#elif BOARD == XMEGA_C3_XPLAINED
-#  include "xmega_c3_xplained/xmega_c3_xplained.h"
-#elif BOARD == XMEGA_RF233_ZIGBIT
-#  include "xmega_rf233_zigbit/xmega_rf233_zigbit.h"
-#elif BOARD == XMEGA_A3_REB_CBB
-#  include "xmega_a3_reb_cbb/xmega_a3_reb_cbb.h"
-#elif BOARD == ATMEGARFX_RCB
-#  include "atmegarfx_rcb/atmegarfx_rcb.h"
-#elif BOARD == RCB256RFR2_XPRO
-#  include "atmega256rfr2_rcb_xpro/atmega256rfr2_rcb_xpro.h"
-#elif BOARD == XMEGA_RF212B_ZIGBIT
-#  include "xmega_rf212b_zigbit/xmega_rf212b_zigbit.h"
-#elif BOARD == SAM4E_XPLAINED_PRO
-#  include "sam4e_xplained_pro/sam4e_xplained_pro.h"
-#elif BOARD == ATMEGA328P_XPLAINED_MINI
-#  include "atmega328p_xplained_mini/atmega328p_xplained_mini.h"
-#elif BOARD == ATMEGA328PB_XPLAINED_MINI
-#  include "atmega328pb_xplained_mini/atmega328pb_xplained_mini.h"
-#elif BOARD == SAMB11_XPLAINED_PRO
-#  include "samb11_xplained_pro/samb11_xplained_pro.h"
-#elif BOARD == SAME70_XPLAINED
-#  include "same70_xplained/same70_xplained.h"
-#elif BOARD == ATMEGA168PB_XPLAINED_MINI
-#  include "atmega168pb_xplained_mini/atmega168pb_xplained_mini.h"
-#elif BOARD == ATMEGA324PB_XPLAINED_PRO
-#  include "atmega324pb_xplained_pro/atmega324pb_xplained_pro.h"
-#elif BOARD == SAMB11ZR_XPLAINED_PRO
-#  include "samb11zr_xplained_pro/samb11zr_xplained_pro.h"
-#elif BOARD == SIMULATOR_XMEGA_A1
-#  include "simulator/xmega_a1/simulator_xmega_a1.h"
-#elif BOARD == AVR_SIMULATOR_UC3
-#  include "avr_simulator_uc3/avr_simulator_uc3.h"
-#elif BOARD == SAMR21G18_MODULE
-# include "samr21g18_module/samr21g18_module.h"
-#elif BOARD == SAMR21B18_MODULE
-# include "samr21b18_module/samr21b18_module.h"
-#elif BOARD == SAMR34_XPLAINED_PRO && defined(__SAMR34J18B__)
-#  include "samr34_xplained_pro/samr34_xplained_pro.h"
-#elif BOARD == USER_BOARD
-// User-reserved area: #include the header file of your board here (if any).
-#  include "user_board.h"
-#elif BOARD == DUMMY_BOARD
-#  include "dummy/dummy_board.h"
-#elif BOARD == SAMB11ZR_SENSOR_TAG
-#  include "samb11zr_sensor_tag/samb11zr_sensor_tag.h"
-#else
-#  error No known Atmel board defined
-#endif
-
-#if (defined EXT_BOARD)
-#  if EXT_BOARD == MC300
-#    include "mc300/mc300.h"
-#  elif (EXT_BOARD == SENSORS_XPLAINED_INERTIAL_1)  || \
-        (EXT_BOARD == SENSORS_XPLAINED_INERTIAL_2)  || \
-        (EXT_BOARD == SENSORS_XPLAINED_INERTIAL_A1) || \
-        (EXT_BOARD == SENSORS_XPLAINED_PRESSURE_1)  || \
-        (EXT_BOARD == SENSORS_XPLAINED_LIGHTPROX_1) || \
-        (EXT_BOARD == SENSORS_XPLAINED_BREADBOARD)
-#    include "sensors_xplained/sensors_xplained.h"
-#  elif EXT_BOARD == RZ600_AT86RF231
-#     include "at86rf231/at86rf231.h"
-#  elif EXT_BOARD == RZ600_AT86RF230B
-#    include "at86rf230b/at86rf230b.h"
-#  elif EXT_BOARD == RZ600_AT86RF212
-#    include "at86rf212/at86rf212.h"
-#  elif EXT_BOARD == SECURITY_XPLAINED
-#    include "security_xplained.h"
-#  elif EXT_BOARD == USER_EXT_BOARD
-    // User-reserved area: #include the header file of your extension board here
-    // (if any).
-#  endif
-#endif
-
-
-#if (defined(__GNUC__) && defined(__AVR32__)) || (defined(__ICCAVR32__) || defined(__AAVR32__))
-#ifdef __AVR32_ABI_COMPILER__ // Automatically defined when compiling for AVR32, not when assembling.
-
-/*! \brief This function initializes the board target resources
- *
- * This function should be called to ensure proper initialization of the target
- * board hardware connected to the part.
- */
-extern void board_init(void);
-
-#endif  // #ifdef __AVR32_ABI_COMPILER__
-#else
-/*! \brief This function initializes the board target resources
- *
- * This function should be called to ensure proper initialization of the target
- * board hardware connected to the part.
- */
-extern void board_init(void);
-#endif
-
-
-#ifdef __cplusplus
-}
-#endif
-
-/**
- * \}
+/* This file is intended to contain definitions and configuration details for
+ * features and devices that are available on the board, e.g., frequency and
+ * startup time for an external crystal, external memory devices, LED and USART
+ * pins.
  */
 
-#endif  // _BOARD_H_
+// I/O pin definitions
+#define U0_RX		AVR32_PIN_PA00	// init as module pin
+#define U0_TX		AVR32_PIN_PA01	// init as module pin
+#define U0_EXTCLK	AVR32_PIN_PA02	// external clock for the UART, init input, no pull-up
+#define U0_RTS		AVR32_PIN_PA03	// optional, init as gpio output, value 0
+#define U0_CTS		AVR32_PIN_PA04	// optional, init as input
+
+#define U1_RX		AVR32_PIN_PA05	// init as gpio input  
+#define U1_TX		AVR32_PIN_PA06	// init as gpio output, value 0
+#define U1_EXTCLK	AVR32_PIN_PA07	// external clock for the UART, init as input, no-pull up
+#define U1_RTS		AVR32_PIN_PA08	// optional, init as gpio output, value 0
+#define U1_CTS		AVR32_PIN_PA09	// optional, init as input
+
+#define DAC_SPI						(&AVR32_SPI0)					// defined as below....
+//#define DAC_SPI_IRQ				AVR32_SPI0_IRQ                    // 288
+//#define DAC_SPI_SPI_CS_MSB		AVR32_SPI0_SPI_CS_MSB             // 3
+#define DAC_SPI_CS0					AVR32_PIN_PA10	// init as module function for DAC
+#define DAC_SPI_NPCS_PIN			AVR32_SPI0_NPCS_0_0_PIN             // 10
+#define DAC_SPI_NPCS_FUNCTION		AVR32_SPI0_NPCS_0_0_FUNCTION        // 0
+#define DAC_SPI_MISO				AVR32_PIN_PA11	// init as SPI0_MISO module funtion for DAC (USB_IDA is DNP on board)
+#define DAC_SPI_MISO_PIN			AVR32_SPI0_MISO_0_0_PIN             // 11
+#define DAC_SPI_MISO_FUNCTION		AVR32_SPI0_MISO_0_0_FUNCTION        // 0
+#define DAC_SPI_MOSI				AVR32_PIN_PA12	// init as SPIO_MOSI function for DAC
+#define DAC_SPI_MOSI_PIN			AVR32_SPI0_MOSI_0_0_PIN             // 12
+#define DAC_SPI_MOSI_FUNCTION		AVR32_SPI0_MOSI_0_0_FUNCTION        // 0
+#define DAC_SPI_SCK					AVR32_PIN_PA13	// init as SPIO_SCK function for DAC
+#define DAC_SPI_SCK_PIN				AVR32_SPI0_SCK_0_0_PIN              // 13
+#define DAC_SPI_SCK_FUNCTION		AVR32_SPI0_SCK_0_0_FUNCTION         // 0
+
+#define RTCMEM_SPI					(&AVR32_SPI1)	// used for RTC chip and Quickfilter
+#define MEM_SPI_CS0					AVR32_PIN_PA14
+#define MEM_SPI_NPCS_PIN         	AVR32_SPI1_NPCS_0_0_PIN
+#define MEM_SPI_NPCS_FUNCTION     	AVR32_SPI1_NPCS_0_0_FUNCTION
+#define RTCMEM_SPI_MISO				AVR32_PIN_PA17
+#define RTCMEM_SPI_MISO_PIN        	AVR32_SPI1_MISO_0_0_PIN
+#define RTCMEM_SPI_MISO_FUNCTION    AVR32_SPI1_MISO_0_0_FUNCTION
+#define RTCMEM_SPI_MOSI				AVR32_PIN_PA16
+#define RTCMEM_SPI_MOSI_PIN        	AVR32_SPI1_MOSI_0_0_PIN
+#define RTCMEM_SPI_MOSI_FUNCTION   	AVR32_SPI1_MOSI_0_0_FUNCTION 
+#define RTCMEM_SPI_SCK				AVR32_PIN_PA15
+#define RTCMEM_SPI_SCK_PIN         	AVR32_SPI1_SCK_0_0_PIN 
+#define RTCMEM_SPI_SCK_FUNCTION    	AVR32_SPI1_SCK_0_0_FUNCTION
+#define RTC_SPI_CS1					AVR32_PIN_PA18
+#define RTC_SPI_NPCS_PIN            AVR32_SPI1_NPCS_1_0_PIN
+#define RTC_SPI_NPCS_FUNCTION       AVR32_SPI1_NPCS_1_0_FUNCTION
+
+#define PA19_1		AVR32_PIN_PA19		// spare I/O, init as output, value 0
+
+//#define SWL0		AVR32_PIN_PA20  	// dip switch input line, intit as gpio input with internal pull up
+//#define SWL1		AVR32_PIN_PA21		// dip switch input line, intit as gpio input with internal pull up
+//#define SWL2		AVR32_PIN_PA22  	// dip switch input line, intit as gpio input with internal pull up
+//#define SWL3		AVR32_PIN_PA23		// dip switch input line, intit as gpio input with internal pull up
+//#define SWL4		AVR32_PIN_PA24  	// dip switch input line, intit as gpio input with internal pull up
+
+#define BOOT_DFU_ISU	AVR32_PIN_PA25	// force boot pin, (possibly with external 100K pull up) init as gpio input with internal pull up
+#define U0_SDN_N	AVR32_PIN_PA26		// init as gpio output, value 0 = RS232 driver shutdown (board has 100K pull down)
+#define U1_SDN_N	AVR32_PIN_PA27		// init as gpio output, value 0 = RS232 driver shutdown (board has 100K pull down)
+#define U3_SDN_N	AVR32_PIN_PA28		// init as gpio output, value 0 = RS232 driver shutdown (board has 100K pull down)
+
+#define U1_IN_LED	AVR32_PIN_PA29		// uart1 led input indicator, init as gpio output, value 0 (OFF)
+#define U0_IN_LED	AVR32_PIN_PA30		// uart0 led input indicator, init as gpio output, value 0 (OFF)
+
+#define X32K_XIN32	AVR32_PIN_PC00		// init as module function 32KHz oscillator, external 32768 osc input...
+#define X32K_XOUT32	AVR32_PIN_PC01  	// init as module function 32KHz oscillator, no connection
+#define X12M_XIN0	AVR32_PIN_PC02  	// init as module funciton OSC0
+#define X12M_XOUT0	AVR32_PIN_PC03  	// init as module function OSC0
+
+// Pin PC04 is not connected, init it as gpio output, value 0
+
+#define GPS_LK_LED	AVR32_PIN_PC05  	// GPS module lock indicator, init as gpio output, value 0 (OFF)
+
+#define PPS_IN      AVR32_PIN_PB00  	// init as gpio input; there is a 100K pull down on the board
+#define GPS_ON		AVR32_PIN_PB01  	// SkyTraq Venus 6 power regulator, active high (100K pull down on board), init gpio output, value 0 (OFF)
+										// W2SG0084i GPS "GPS Enable" line; pulse turns it on or turns it into hibernation
+
+//Pins PB02 and PB03 are not connected, set them as gpio outputs, value 0
+
+#define U3_EXTCLK	AVR32_PIN_PB04		// external clock for the UART, init input, no pull-up
+
+// SW1 - SW5 are not used, in the init.c routine the pins PB05 - PB08 are set to inputs with pul ups
+//#define SW1			AVR32_PIN_PB05		// change to output with value 0 to drive SWx and read SWl0-SWL4
+//#define SW2			AVR32_PIN_PB06		// change to output with value 0 to drive SWx and read SWl0-SWL4
+//#define SW3			AVR32_PIN_PB07		// change to output with value 0 to drive SWx and read SWl0-SWL4
+//#define SW4			AVR32_PIN_PB08		// change to output with value 0 to drive SWx and read SWl0-SWL4
+//#define SW5			AVR32_PIN_PB09		// change to output with value 0 to drive SWx and read SWl0-SWL4
+
+#define U3_RX		AVR32_PIN_PB10		// init input, then change to as module pin, Console UART
+#define U3_TX		AVR32_PIN_PB11		// init as output, value 0, then change to module pin, Console UART
+
+#define XTIMER_IN	AVR32_PIN_PB12	// RTC option, ALARM output interrupt line, set as gpio input 
+
+// Pins PB13 and PB14 are unconnected, set them as gpio outputs, value 0
+
+#define U1_INVLD_N	AVR32_PIN_PB15	// U1 RS232 driver output, init as gpio input, no pull up
+#define USB_IDB		AVR32_PIN_PB16	// optional, init as gpio input, with pull up resistor
+#define U0_INVLD_N	AVR32_PIN_PB17	// U0 RS232 driver output, init as gpio input, no pull up
+
+#define USB_VBOF	AVR32_PIN_PB18	// test point only, init as output value 0
+
+// output the CPU clock for diagnositics using a GCLK module function
+#define CPU_LED		AVR32_PIN_PB19  // used as PM GCLOCK module function, init as gpio output, value 0 (OFF)
+#define GCLK_ID		0
+#define GCLK_PIN	AVR32_PM_GCLK_0_1_PIN			// AVR32 "pin 51", PB19, see uc3a1512.h header file
+#define GCLK_FUNCTION	AVR32_PM_GCLK_0_1_FUNCTION
+
+// Pin PB20 is unconnected, set as gpio output, value 0
+
+// External UART cclock for inputs to UARTs 0, 1, 2, and 3
+#define EXT_UCLK	AVR32_PIN_PB21  // used as PM GCLOCK module function, init as gpio output, value 1
+#define EUCLK_ID	2
+#define EUCLK_PIN	AVR32_PM_GCLK_2_0_PIN			// AVR32 "pin 53", PB21, see /uc3a1512.h header file
+#define EUCLK_FUNCTION	AVR32_PM_GCLK_2_0_FUNCTION
+
+#define U3_AON_N	AVR32_PIN_PB22	// Force On for UART3 driver chip (console), 100K pull down on board, init as output, value 1 (SJ1 open)?
+#define GPS_AWAKE	AVR32_PIN_PB23	// PB23 is the signal from W2SG0084i that the GPS chip is active in BOARD_REV2
+#define U3_INVLD_N	AVR32_PIN_PB23	// or U3 RS232 driver output, init as gpio input, no pull up in the original board layout
+
+// Pin PB24 is unconnected, set as gpio output, value 0
+ 
+#define R_CH_SEL	AVR32_PIN_PB25  // Radio Channel select output to Ritron, init as gpio output, value 0
+#define FLTR_SDN	AVR32_PIN_PB26	// 0 is shutdown, init as gpio output, value 0
+#define XMTRON_PIN  AVR32_PIN_PB27	// 1 is on, init as gpio output, value 0
+#define PTTON_PIN   AVR32_PIN_PB28  // 1 is on, init as gpio output, value 0
+
+#define U2_RX		AVR32_PIN_PB29	// GPS option, init as gpio input with pull up?, later as module pin
+#define U2_TX		AVR32_PIN_PB30	// GPS option, init as gpio output, value 0, later as module pin
+#define U2_EXTCLK	AVR32_PIN_PB31	// GPS option, init as gpio input, later as module pin (ext uart clock)
+
+#define pm  &AVR32_PM
+extern volatile avr32_tc_t * tc;
+extern volatile avr32_rtc_t * rtc;
+#define USART0 AVR32_USART0
+#define USART1 AVR32_USART1
+#define USART2 AVR32_USART2
+#define USART3 AVR32_USART3
+
+extern void init_start_gclk_uart3(void);
+extern void init_start_ext_uart_clk(void);
+
+#endif // USER_BOARD_H
