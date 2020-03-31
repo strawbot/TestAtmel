@@ -276,6 +276,7 @@
       <Value>../src/ASF/common/services/serial</Value>
       <Value>../src/ASF/common/services/ioport</Value>
       <Value>../src/ASF/avr32/drivers/pm</Value>
+      <Value>../src/Hardware</Value>
     </ListValues>
   </avr32gcc.compiler.directories.IncludePaths>
   <avr32gcc.compiler.optimization.OtherFlags>-fdata-sections</avr32gcc.compiler.optimization.OtherFlags>
@@ -438,9 +439,9 @@
     <Compile Include="src\ASF\avr32\drivers\utils\status_codes.h">
       <SubType>compile</SubType>
     </Compile>
-    <None Include="src\ASF\common\boards\board.h">
+    <Compile Include="src\ASF\common\boards\board.h">
       <SubType>compile</SubType>
-    </None>
+    </Compile>
     <Compile Include="src\ASF\common\boards\user_board\init.c">
       <SubType>compile</SubType>
     </Compile>
@@ -510,6 +511,12 @@
     <None Include="src\config\conf_usart_serial.h">
       <SubType>compile</SubType>
     </None>
+    <Compile Include="src\Hardware\init_hw.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Hardware\leds.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\main.c">
       <SubType>compile</SubType>
     </Compile>
@@ -551,6 +558,7 @@
     <Folder Include="src\ASF\common\utils\" />
     <Folder Include="src\ASF\common\utils\interrupt\" />
     <Folder Include="src\config\" />
+    <Folder Include="src\Hardware" />
     <Folder Include="vsix\" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />

@@ -12,107 +12,6 @@
 #ifndef CSI_A200_H
 #define CSI_A200_H
 
-
-//Radio TX level programmable pot
-#define CSI_RF_CS_N		AVR32_PIN_PC04  // programmable pot chip select, init as gpio output, value 0 (OFF); pot power normally OFF
-#define CSI_RF_GAIN		AVR32_PIN_PB18  // programmable pot gain up, init as gpio output, value 0 (OFF); pot power normally OFF; USB_VBOF on G2010
-
-//CSI ADC Mux Selects
-#define CSI_SEL_CHA		AVR32_PIN_PB08
-#define CSI_SEL_CHB		AVR32_PIN_PB09
-#define CSI_SEL_CHC		AVR32_PIN_PB13
-#define MUX_VIN	0			//VIN on CH0
-#define MUX_4_20 1		// 4 to 20 mA on CH1
-#define MUX_REF 2			// VREF on CH2
-#define MUX_GND 3			//GND on CH3
-#define MUX_AUDIO 4		//Audio level on CH4
-#define MUX_VBAT 5		//battery voltage on CH5
-#define MUX_OFF 6			//mux selects LOW
-#define CSI_4_20MA_EN		AVR32_PIN_PB03	// 4 to 20 mA resistor; HI to switch in
-#define CSI_SDI12_EN_TX	AVR32_PIN_PB02	//SDI12 enable TX driver
-#define mV_batt_cal 307.993e-3F		//conversion factor from full scale of 5.123V  to mV (5123/65536), and battery voltage through divider (3.94)
-#define mV_cal 78.171e-3F		//conversion factor from full scale of 5.123V  to mV (5123/65536)
-#define mA_cal 78.171e-5F		//conversion factor from full scale of 20.574 mA  to mA ((5123/65536)/100); 100 ohm current sense resistor
-#define NAN (__builtin_nanf(""))
-
-//CSI Wakeups (external interrupts)
-#define CSI_INT_XTIMER	AVR32_PIN_PA20	//RTC wakeup
-#define CSI_INT_U1_RX		AVR32_PIN_PA22	//UART 1 RX wakeup
-#define CSI_INT_U1_IVLD	AVR32_PIN_PA23	//UART 1 INVALID wakeup
-
-//CSI 9pin I/O
-#define CSI_DL_TXD_EN		AVR32_PIN_PB07	//CSI/O DL TXD enable (active HI)
-#define CSI_DL_SDE_N		AVR32_PIN_PA21	//CSI/O SDE input (active LO)
-#define CSI_DL_SDC_RST	AVR32_PIN_PA11	//CSI/O SDC reset input (active HI)
-#define CSI_DL_RING_EN	AVR32_PIN_PC01	//CSI/O RING output (active HI)
-#define DRIVE_RING      0x10
-#define SDC_OFF             0x00
-#define SDC_ON              0x01
-
-
-//CSIO ISR State definitions
-#define CSIO_rst	0											//CSIO port reset (CLK & SDE LO @ 9p)
-#define CSIO_sde	1											//SDE rising edge (@9p) detected
-#define CSIO_adr	2											//address received & matches AL200 ADC address;
-																				//first byte of SDC interchange sent; free buffer space in terms of 16 byte blocks; limit of 0xfe blocks
-#define CSIO_byte2_txd	3								//second byte of SDC interchange; RxBodyLen set to # bytes in buffer (0xff max)
-#define CSIO_xtra1_txd	4								//extra byte sent out here for CR5000
-#define CSIO_block_txd	5								//RxBodyLen bytes are read from RS232 buffer, till RxBodyLen=0
-#define CSIO_xtra2_txd	6								//second extra byte sent out here for CR5000
-#define CSIO_turnaround_txd	7						//last byte of valid transmit data has been SHIFTED OUT of SPI TX reg
-#define CSIO_block_rxd	8								//stuffs incoming data into buffer
-
-
-#define CSI_SWI_IN			AVR32_PIN_PB14	//switch closure input
-#define CSI_BUTTON_IN		AVR32_PIN_PA24	//button input
-
-//CSI power control
-#define CSI_SW_12V_EN		AVR32_PIN_PB20			//CSI SDI 12V enable
-#define CSI_ANA_5V_EN		AVR32_PIN_PB24			//CSI analog 5.2V supply enable
-#define CSI_GPS_WU			AVR32_PIN_PB05			//GPS WU signal (HI when GPS powered)
-
-
-#define ADC_SLP 0x9000			//EN1, EN2, SPD, SLP in top nibble (sleep has VRef off)
-#define ADC_NAP 0x8000			//EN1, EN2, SPD, SLP
-#define SLP 0								//for ADC control
-#define NAP 1
-#define ADC_CS_PIN		0x00000000		// add to transmit data to select LTC ADC
-#define LAST_TFER_FLAG	0x01000000		// add to last transmit data to deselect ADC
-										// when using CSSAAT=1 flag (allowing multiple reads)
-
-//External switch closure (Rain Gage) counter
-#define SWITCH_TC_CHANNEL		2
-
-//CSIO buffers
-#define CSIO_TX_COM_CBUF_SIZE	0x200			//data going out (TXed) on CSIO 
-#define CSIO_RX_COM_CBUF_SIZE	0x400			//data being received (RXed) on CSIO
-#define CSIO_TX_CBUF_MASK	(CSIO_TX_COM_CBUF_SIZE - 1)
-#define CSIO_RX_CBUF_MASK	(CSIO_RX_COM_CBUF_SIZE - 1)
-
-//Sensor Input Defines
-#define SensorInput 1
-#define Disabled 0								//control port or SE1 disabled
-#define Status 1									//control port status setting
-#define SDI12 2										//SDI-12 port setting
-#define mV 1											//SE1 mV mode
-#define mA 2											//SE1 mA mode
-#define TBR_Acc_Start 0x8003F000  // starting address in flash of TBR Accumulator page
-#define TBR_Acc_End  0x8003F1FF  // ending address in flash of TBR Accumulator page
-
-//Sensor Measurement State Machine Defines
-#define SDI_time 0
-#define SW12_time 1
-#define SDI_meas 2
-#define SE1_time 3
-
-#	ifndef __ALERT1__	
-#define CSI_VERSION_NUMBER "AL200.ALERT2.033"	//ALERT2
-# else
-#define CSI_VERSION_NUMBER "AL200.ALERT.015"	//ALERT1
-# endif
-//Use AL200.Std.01.00 for released code; only put 17 byte stuff for the 17 byte version
-
-
 typedef struct
 {
 	U16 Seq;
@@ -152,7 +51,6 @@ U32 members, and an even number of U8 members between U16 members and/or a multi
 */ 
 
 //! Structure type containing initialization variables to store in NVRAM
-#	ifndef __ALERT1__
 typedef struct
 {
 	U8 Mode;
@@ -181,49 +79,6 @@ typedef struct
 	S8 SW12_Warmup;
 	U16 crc;
 } init_CSI_t;
-# endif  /*  ifndef __ALERT1__  */
-
-# ifdef __ALERT1__
-typedef struct
-{
-	U8 Mode;
-	U8 Clock_Status;
-	U8 Clock_Status_Sensor_ID;
-	U8 MarkSpace_Tone;
-	U8 WaterLog;
-	U8 Spare1;
-	U16 Spare2;
-	U8 P1_Enable;
-	U8 SE1_Mode;
-	U16 SE1_ID;
-	U16 C1_ID;
-	U16 P1_ID;
-	U16 BATT_ID;
-	U8 SDI_Value;
-	U8 Control_Port_Mode;
-	char SDI_Cmd[8];
-	U16 S2;
-	U16 DevCon_Int;
-	U16 Mod_Voltage;
-	U16 Sensor_Scan;
-	U32 Self_Report_Interval;
-	F32 SE1_Mult;
-	F32 SE1_Off;
-	U16 SE1_TX_change;
-	U16 Spare3;
-	SDI12_t SDI12Data[9];
-	U8 SDC;
-	S8 SW12_Warmup;
-	U16 crc;
-} init_CSI_t;
-
-typedef struct
-{
-	U16 AL1_addr;
-	U16 AL1_data;
-} AL1_t;
-
-# endif  /*  ifdef __ALERT1__  */
 
 typedef struct
 {
@@ -262,16 +117,6 @@ typedef struct
 	U8 NumTips;
 	char TimeOffsets[350];
 } Tip_t;
-
-
-
-//global variables
-
-//console UART3 variables
-//extern volatile U8 uart3_rx_cb[CON_COM_CBUF_SIZE];
-//extern volatile U16 uart3_rx_wr_idx;	// Console circular buffer
-//extern volatile U16 uart3_rx_rd_idx;
-//extern volatile U16 uart3_rx_err;		// error code from uart3 rx interrupt handler
 
 
 //flags
