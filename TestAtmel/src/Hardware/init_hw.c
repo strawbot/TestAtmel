@@ -300,9 +300,7 @@ static void al200Board_init() {
         delay_ms(500); //wait for GPS to be ready to accept input
     }
 
-    //init CSI Specific variables
-    //CSIO_state = CSIO_rst;
-
+    usart_serial_init(&CONSOLE, &usart_options);
 }
 
 /*************************************************************************************
@@ -315,9 +313,6 @@ static void al200Board_init() {
  * INACK, DSNACK, VAR_SYNC, MAX_ITERATION, 
  * FILTER, MAN, MODSYNC, ONEBIT = default (0)
  */
-#define GCLK_UART_CD_57_6	1
-#define GCLK_UART_FP_57_6	6
-
 void init_start_gclk_uart3(void) {
     // stop, reset all flags, disable ints
     //usart_reset(&USART3);
@@ -342,14 +337,15 @@ void init_start_gclk_uart3(void) {
     (&USART3)->cr = AVR32_USART_CR_RXEN_MASK | AVR32_USART_CR_TXEN_MASK;
 }
 
-
-#define USART_SERIAL  &AVR32_USART3
-
 void init_hw() {
     al200Board_init();
-    usart_serial_init(USART_SERIAL, &usart_options);
 	redOn();
 	const char * banner = "Good Mornin!";
-	while (*banner) usart_serial_putchar(USART_SERIAL, *banner++);
+	while (*banner) usart_serial_putchar(&CONSOLE, *banner++);
 	redOff();
+}
+
+void console() {
+	if (CONSOLE.CSR.rxrdy == 1)
+		CONSOLE.THR.txchr = CONSOLE.RHR.rxchr;
 }

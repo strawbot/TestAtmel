@@ -237,6 +237,11 @@ extern volatile avr32_rtc_t * rtc;
 #define USART2 AVR32_USART2
 #define USART3 AVR32_USART3
 
+#define GCLK_UART_CD_57_6	1
+#define GCLK_UART_FP_57_6	6
+
+#define CONSOLE  USART3
+
 // External oscillator settings.
 // Uncomment and set correct values if external oscillator is used.
 
