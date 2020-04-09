@@ -44,8 +44,8 @@
  *
  */
 
-#include "compiler.h"
 #include "pm.h"
+#include "compiler.h"
 #include <string.h>
 
 extern void flashc_set_wait_state(unsigned int wait_state);

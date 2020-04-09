@@ -31,12 +31,19 @@
     <AsfFrameworkConfig>
       <framework-data>
         <options>
+          <option id="avr32.drivers.cpu.cycle_counter" value="Add" config="" content-id="Atmel.ASF" />
           <option id="avr32.drivers.gpio" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="avr32.drivers.intc" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="avr32.drivers.rtc" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="avr32.drivers.usart" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="avr32.services.freq_detect" value="Add" config="" content-id="Atmel.ASF" />
           <option id="common.boards" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="common.services.basic.clock" value="Add" config="" content-id="Atmel.ASF" />
           <option id="common.services.delay" value="Add" config="" content-id="Atmel.ASF" />
           <option id="common.services.ioport" value="Add" config="" content-id="Atmel.ASF" />
           <option id="common.services.basic.serial" value="Add" config="" content-id="Atmel.ASF" />
-          <option id="avr32.drivers.usart" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="common.utils.interrupt" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="avr32.drivers.tc" value="Add" config="" content-id="Atmel.ASF" />
         </options>
         <configurations>
           <configuration key="config.avr32.utils.trampoline" value="yes" default="yes" content-id="Atmel.ASF" />
@@ -94,6 +101,13 @@
           <file path="src/Config/conf_usart_serial.h" framework="" version="3.46.0" source="common\services\serial\uc3_usart\module_config\conf_usart_serial.h" changed="False" content-id="Atmel.ASF" />
           <file path="src/ASF/common/services/ioport/ioport.h" framework="" version="3.46.0" source="common\services\ioport\ioport.h" changed="False" content-id="Atmel.ASF" />
           <file path="src/ASF/common/services/ioport/uc3/ioport.h" framework="" version="3.46.0" source="common\services\ioport\uc3\ioport.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/services/freq_detect/freq_detect.c" framework="" version="3.34.1" source="avr32\services\freq_detect\freq_detect.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/services/freq_detect/freq_detect.h" framework="" version="3.34.1" source="avr32\services\freq_detect\freq_detect.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/Config/conf_freq_detect.h" framework="" version="3.34.1" source="avr32\services\freq_detect\module_config\conf_freq_detect.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/rtc/rtc.c" framework="" version="3.34.1" source="avr32\drivers\rtc\rtc.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/rtc/rtc.h" framework="" version="3.34.1" source="avr32\drivers\rtc\rtc.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/tc/tc.c" framework="" version="3.34.1" source="avr32\drivers\tc\tc.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/tc/tc.h" framework="" version="3.34.1" source="avr32\drivers\tc\tc.h" changed="False" content-id="Atmel.ASF" />
         </files>
         <documentation help="http://asf.atmel.com/docs/3.46.0/common.applications.user_application.user_board.uc3a/html/index.html" />
         <offline-documentation help="" />
@@ -111,7 +125,7 @@
     <com_atmel_avrdbg_tool_atmelice>
       <ToolOptions>
         <InterfaceProperties>
-          <JtagDbgClock>7500000</JtagDbgClock>
+          <JtagDbgClock>5700000</JtagDbgClock>
           <JtagEnableExtResetOnStartSession>true</JtagEnableExtResetOnStartSession>
           <JtagInChain>false</JtagInChain>
           <JtagDevicesBefore>0</JtagDevicesBefore>
@@ -128,7 +142,7 @@
       <ToolNumber>J41800115947</ToolNumber>
       <ToolName>Atmel-ICE</ToolName>
     </com_atmel_avrdbg_tool_atmelice>
-    <avrtoolinterfaceclock>7500000</avrtoolinterfaceclock>
+    <avrtoolinterfaceclock>5700000</avrtoolinterfaceclock>
     <com_atmel_avrdbg_tool_simulator>
       <ToolOptions xmlns="">
         <InterfaceProperties>
@@ -175,6 +189,10 @@
             <Value>../src/ASF/common/services/serial/uc3_usart</Value>
             <Value>../src/ASF/common/services/serial</Value>
             <Value>../src/ASF/common/services/ioport</Value>
+            <Value>../src/ASF/avr32/services/freq_detect</Value>
+            <Value>../src/ASF/avr32/drivers/rtc</Value>
+            <Value>../src/ASF/avr32/drivers/pm</Value>
+            <Value>../src/ASF/avr32/drivers/tc</Value>
           </ListValues>
         </avr32gcc.compiler.directories.IncludePaths>
         <avr32gcc.compiler.optimization.level>Optimize for size (-Os)</avr32gcc.compiler.optimization.level>
@@ -214,6 +232,10 @@
             <Value>../src/ASF/common/services/serial/uc3_usart</Value>
             <Value>../src/ASF/common/services/serial</Value>
             <Value>../src/ASF/common/services/ioport</Value>
+            <Value>../src/ASF/avr32/services/freq_detect</Value>
+            <Value>../src/ASF/avr32/drivers/rtc</Value>
+            <Value>../src/ASF/avr32/drivers/pm</Value>
+            <Value>../src/ASF/avr32/drivers/tc</Value>
           </ListValues>
         </avr32gcc.assembler.general.IncludePaths>
         <avr32gcc.preprocessingassembler.general.AssemblerFlags>-mrelax -DBOARD=USER_BOARD</avr32gcc.preprocessingassembler.general.AssemblerFlags>
@@ -237,6 +259,10 @@
             <Value>../src/ASF/common/services/serial/uc3_usart</Value>
             <Value>../src/ASF/common/services/serial</Value>
             <Value>../src/ASF/common/services/ioport</Value>
+            <Value>../src/ASF/avr32/services/freq_detect</Value>
+            <Value>../src/ASF/avr32/drivers/rtc</Value>
+            <Value>../src/ASF/avr32/drivers/pm</Value>
+            <Value>../src/ASF/avr32/drivers/tc</Value>
           </ListValues>
         </avr32gcc.preprocessingassembler.general.IncludePaths>
       </Avr32Gcc>
@@ -277,6 +303,10 @@
             <Value>../src/ASF/common/services/ioport</Value>
             <Value>../src/ASF/avr32/drivers/pm</Value>
             <Value>../src/Hardware</Value>
+            <Value>../src/TimbreOS</Value>
+            <Value>../src/ASF/avr32/services/freq_detect</Value>
+            <Value>../src/ASF/avr32/drivers/rtc</Value>
+            <Value>../src/ASF/avr32/drivers/tc</Value>
           </ListValues>
         </avr32gcc.compiler.directories.IncludePaths>
         <avr32gcc.compiler.optimization.OtherFlags>-fdata-sections</avr32gcc.compiler.optimization.OtherFlags>
@@ -315,6 +345,10 @@
             <Value>../src/ASF/common/services/serial/uc3_usart</Value>
             <Value>../src/ASF/common/services/serial</Value>
             <Value>../src/ASF/common/services/ioport</Value>
+            <Value>../src/ASF/avr32/services/freq_detect</Value>
+            <Value>../src/ASF/avr32/drivers/rtc</Value>
+            <Value>../src/ASF/avr32/drivers/pm</Value>
+            <Value>../src/ASF/avr32/drivers/tc</Value>
           </ListValues>
         </avr32gcc.assembler.general.IncludePaths>
         <avr32gcc.assembler.debugging.DebugLevel>Default (-g)</avr32gcc.assembler.debugging.DebugLevel>
@@ -339,6 +373,10 @@
             <Value>../src/ASF/common/services/serial/uc3_usart</Value>
             <Value>../src/ASF/common/services/serial</Value>
             <Value>../src/ASF/common/services/ioport</Value>
+            <Value>../src/ASF/avr32/services/freq_detect</Value>
+            <Value>../src/ASF/avr32/drivers/rtc</Value>
+            <Value>../src/ASF/avr32/drivers/pm</Value>
+            <Value>../src/ASF/avr32/drivers/tc</Value>
           </ListValues>
         </avr32gcc.preprocessingassembler.general.IncludePaths>
         <avr32gcc.preprocessingassembler.debugging.DebugLevel>Default (-Wa,-g)</avr32gcc.preprocessingassembler.debugging.DebugLevel>
@@ -346,6 +384,102 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="src\ASF\avr32\drivers\rtc\rtc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <None Include="src\ASF\avr32\drivers\rtc\rtc.h">
+      <SubType>compile</SubType>
+    </None>
+    <Compile Include="src\ASF\avr32\drivers\tc\tc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <None Include="src\ASF\avr32\drivers\tc\tc.h">
+      <SubType>compile</SubType>
+    </None>
+    <Compile Include="src\ASF\avr32\services\freq_detect\freq_detect.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <None Include="src\ASF\avr32\services\freq_detect\freq_detect.h">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="src\config\conf_freq_detect.h">
+      <SubType>compile</SubType>
+    </None>
+    <Compile Include="src\Hardware\clocks.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Hardware\clocks.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Hardware\leds.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\project_defs.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\TimbreOS\byteq.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\TimbreOS\byteq.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\TimbreOS\cli.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\TimbreOS\cli.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\TimbreOS\codeStats.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\TimbreOS\dictionary.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\TimbreOS\dictionary.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\TimbreOS\event.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\TimbreOS\machines.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\TimbreOS\printers.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\TimbreOS\printers.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\TimbreOS\queue.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\TimbreOS\queue.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\TimbreOS\tea.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\TimbreOS\tea.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\TimbreOS\timbre.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\TimbreOS\timeEvent.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\TimbreOS\timeout.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\TimbreOS\timestamp.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\TimbreOS\ttypes.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\TimbreOS\valueTransfer.h">
+      <SubType>compile</SubType>
+    </Compile>
     <None Include="src\asf.h">
       <SubType>compile</SubType>
     </None>
@@ -442,9 +576,6 @@
     <Compile Include="src\ASF\common\boards\board.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\ASF\common\boards\user_board\init.c">
-      <SubType>compile</SubType>
-    </Compile>
     <None Include="src\config\conf_board.h">
       <SubType>compile</SubType>
     </None>
@@ -514,12 +645,30 @@
     <Compile Include="src\Hardware\init_hw.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\Hardware\leds.c">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="src\main.c">
       <SubType>compile</SubType>
     </Compile>
+    <None Include="src\TimbreOS\.git">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="src\TimbreOS\.gitignore">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="src\TimbreOS\log.txt">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="src\TimbreOS\WordLists\clibindings.txt">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="src\TimbreOS\WordLists\floatwords.txt">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="src\TimbreOS\WordLists\parsewords.py">
+      <SubType>compile</SubType>
+    </None>
+    <None Include="src\TimbreOS\WordLists\readme.txt">
+      <SubType>compile</SubType>
+    </None>
     <None Include="vsix\extension.xdkmanifest">
       <SubType>Code</SubType>
     </None>
@@ -538,12 +687,16 @@
     <Folder Include="src\ASF\avr32\drivers\gpio\" />
     <Folder Include="src\ASF\avr32\drivers\intc\" />
     <Folder Include="src\ASF\avr32\drivers\pm\" />
+    <Folder Include="src\ASF\avr32\drivers\rtc\" />
+    <Folder Include="src\ASF\avr32\drivers\tc\" />
     <Folder Include="src\ASF\avr32\drivers\usart\" />
     <Folder Include="src\ASF\avr32\drivers\utils\" />
     <Folder Include="src\ASF\avr32\drivers\utils\header_files\" />
     <Folder Include="src\ASF\avr32\drivers\utils\make\" />
     <Folder Include="src\ASF\avr32\drivers\utils\preprocessor\" />
     <Folder Include="src\ASF\avr32\drivers\utils\startup\" />
+    <Folder Include="src\ASF\avr32\services\" />
+    <Folder Include="src\ASF\avr32\services\freq_detect\" />
     <Folder Include="src\ASF\common\" />
     <Folder Include="src\ASF\common\boards\" />
     <Folder Include="src\ASF\common\boards\user_board\" />
@@ -559,6 +712,10 @@
     <Folder Include="src\ASF\common\utils\interrupt\" />
     <Folder Include="src\config\" />
     <Folder Include="src\Hardware" />
+    <Folder Include="src\TimbreOS\" />
+    <Folder Include="src\TimbreOS\" />
+    <Folder Include="src\TimbreOS\TimbreUnitTests\" />
+    <Folder Include="src\TimbreOS\WordLists\" />
     <Folder Include="vsix\" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />

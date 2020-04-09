@@ -4,6 +4,7 @@
 #include "init_hw.h"
 #include <asf.h>
 
+void init_leds();
 
 /*	static const gpio_map_t USART_GPIO_MAP =
 	{
@@ -261,13 +262,13 @@ static void al200Board_init() {
     //	gpio_enable_pin_pull_up(AVR32_PIN_PC04);	//used for CSI_RF_CS_N on Rev1
 
     // reset and then MAP the module pins (UARTS)
-    usart_reset(&USART0);
+    usart_reset(&AVR32_USART0);
     init_map_uart0(); // uart0
-    usart_reset(&USART1);
+    usart_reset(&AVR32_USART1);
     init_map_uart1(); // uart1
-    usart_reset(&USART2);
+    usart_reset(&AVR32_USART2);
     init_map_uart2(); // gps uart (uart2)
-    usart_reset(&USART3);
+    usart_reset(&AVR32_USART3);
     init_map_uart3(); // uart3 (console)
 
     //reset, disable and MAP the module pins (SPI)
@@ -300,7 +301,7 @@ static void al200Board_init() {
         delay_ms(500); //wait for GPS to be ready to accept input
     }
 
-    usart_serial_init(&CONSOLE, &usart_options);
+    usart_serial_init(CONSOLE, &usart_options);
 }
 
 /*************************************************************************************
@@ -315,37 +316,38 @@ static void al200Board_init() {
  */
 void init_start_gclk_uart3(void) {
     // stop, reset all flags, disable ints
-    //usart_reset(&USART3);
+    //usart_reset(&AVR32_USART3);
     // for 800 kHz external clock, set the oversample rate to 8 instead of 16
-    (&USART3)->mr |= AVR32_USART_OVER_X8 << AVR32_USART_OVER_OFFSET;
+    (&AVR32_USART3)->mr |= AVR32_USART_OVER_X8 << AVR32_USART_OVER_OFFSET;
 // set the baud rate whole and fractional divisor for the input gclk
-    (&USART3)->brgr = (U16)(GCLK_UART_CD_57_6) << AVR32_USART_BRGR_CD_OFFSET | (U16)(GCLK_UART_FP_57_6) << AVR32_USART_BRGR_FP_OFFSET;
+    (&AVR32_USART3)->brgr = (U16)(GCLK_UART_CD_57_6) << AVR32_USART_BRGR_CD_OFFSET | (U16)(GCLK_UART_FP_57_6) << AVR32_USART_BRGR_FP_OFFSET;
     // set clock to external SCK pin
-    (&USART3)->mr &= ~(AVR32_USART_USCLKS_SCK << AVR32_USART_USCLKS_OFFSET);
+    (&AVR32_USART3)->mr &= ~(AVR32_USART_USCLKS_SCK << AVR32_USART_USCLKS_OFFSET);
     // char len 8
-    (&USART3)->mr |= (8 - 5) << AVR32_USART_MR_CHRL_OFFSET;
+    (&AVR32_USART3)->mr |= (8 - 5) << AVR32_USART_MR_CHRL_OFFSET;
     // no parity
-    (&USART3)->mr |= USART_NO_PARITY << AVR32_USART_MR_PAR_OFFSET;
+    (&AVR32_USART3)->mr |= USART_NO_PARITY << AVR32_USART_MR_PAR_OFFSET;
     // set normal channel mode (not local echo, etc)
-    (&USART3)->mr |= 0 << AVR32_USART_MR_CHMODE_OFFSET;
+    (&AVR32_USART3)->mr |= 0 << AVR32_USART_MR_CHMODE_OFFSET;
     // set 1 stop bit
-    (&USART3)->mr |= USART_1_STOPBIT << AVR32_USART_MR_NBSTOP_OFFSET;
+    (&AVR32_USART3)->mr |= USART_1_STOPBIT << AVR32_USART_MR_NBSTOP_OFFSET;
     // set normal usart mode (not RS485, IrDa, etc.)
-    (&USART3)->mr = ((&USART3)->mr & ~AVR32_USART_MR_MODE_MASK) | AVR32_USART_MR_MODE_NORMAL << AVR32_USART_MR_MODE_OFFSET;
+    (&AVR32_USART3)->mr = ((&AVR32_USART3)->mr & ~AVR32_USART_MR_MODE_MASK) | AVR32_USART_MR_MODE_NORMAL << AVR32_USART_MR_MODE_OFFSET;
     // Setup complete; enable communication.
     // Enable input and output.
-    (&USART3)->cr = AVR32_USART_CR_RXEN_MASK | AVR32_USART_CR_TXEN_MASK;
+    (&AVR32_USART3)->cr = AVR32_USART_CR_RXEN_MASK | AVR32_USART_CR_TXEN_MASK;
 }
 
 void init_hw() {
     al200Board_init();
 	redOn();
 	const char * banner = "Good Mornin!";
-	while (*banner) usart_serial_putchar(&CONSOLE, *banner++);
+	while (*banner) usart_serial_putchar(CONSOLE, *banner++);
 	redOff();
+    init_leds();
 }
 
 void console() {
-	if (CONSOLE.CSR.rxrdy == 1)
-		CONSOLE.THR.txchr = CONSOLE.RHR.rxchr;
+	if (CONSOLE->CSR.rxrdy == 1)
+		CONSOLE->THR.txchr = CONSOLE->RHR.rxchr;
 }

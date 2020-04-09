@@ -1,0 +1,3 @@
+[submodule "TestAtmel/src/TimbreOS"]
+	path = TestAtmel/src/TimbreOS
+	url = https://github.com/strawbot/EmbeddedTimbre.git

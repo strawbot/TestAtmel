@@ -65,6 +65,9 @@
 // From module: Delay routines
 #include <delay.h>
 
+// From module: External oscillator frequency detection
+#include <freq_detect.h>
+
 // From module: FLASHC - Flash Controller
 #include <flashc.h>
 
@@ -74,17 +77,30 @@
 // From module: Generic board support
 #include <board.h>
 
+// From module: INTC - Interrupt Controller
+#include <intc.h>
+
 // From module: IOPORT - General purpose I/O service
 #include <ioport.h>
 
 // From module: Interrupt management - UC3 implementation
 #include <interrupt.h>
 
+// From module: PM Power Manager- UC3 A0/A1/A3/A4/B0/B1 implementation
+#include <power_clocks_lib.h>
+#include <sleep.h>
+
 // From module: Part identification macros
 #include <parts.h>
 
+// From module: RTC - Real Time Counter
+#include <rtc.h>
+
 // From module: System Clock Control - UC3 A implementation
 #include <sysclk.h>
+
+// From module: TC - Timer/Counter
+#include <tc.h>
 
 // From module: USART - Serial interface - UC3 implementation
 #include <serial.h>
