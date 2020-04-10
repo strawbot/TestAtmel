@@ -1,0 +1,26 @@
+// Names and function binding for words, constants and immediates
+
+// Guidelines for documenting commands with arguments. Some arguments precede
+//   the command while othes have arguments after. Generally, numbers come before
+//   while strings come after. A number as a string will come after such as the
+//   commands for setting port addresses or ip addresses.
+//
+//   Use:
+//    <s> for strings following a command
+//    (n) for parameters preceding a command
+//        if there are results they are preceded by -
+//        so ( a - n ) uses a and returns n
+//   For example:
+//     	rm rmFile // <name> remove file
+//     	da deviceAddress // ( a ) set device to address a
+//   The rm command is meant to be used:
+//    rm somefilename
+//
+//   The da command is meant to be used:
+//    1 da
+
+
+Words
+End
+
+Include ../TimbreOS/WordLists/clibindings.txt

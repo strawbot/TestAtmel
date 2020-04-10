@@ -58,23 +58,31 @@ static void set_timer1(Long t) {
 	corresponding interrupt level is automatically masked by IxM (unless IxM
 	is explicitly cleared by the software).
 */
+
+static void toggle_red() {
+	static bool on = false;
+	on = on ? redOff() : redOn();
+}
+
+Event TimeoutEvent;
+
  ISR (TIMER1_OVF_vect, 14, 0)    // Timer1 ISR
  {
- 	static bool on = false;
-
+	now(*TimeoutEvent);
 	AVR32_TC.channel[1].sr;
-	on = on ? redOff() : redOn();
-	set_timer1(65535);
+	set_timer1(32767);  // 1s  32KHz clock
+//	set_timer1(62500);  // 1s  PBA@8MHz/128 is clock
  }
 
 #define AVR32_TC_WAVSEL_UP_AUTO_MASK (AVR32_TC_WAVSEL_UP_AUTO << AVR32_TC_WAVSEL_OFFSET)
 
  void init_leds() {
+	 when(TimeoutEvent, toggle_red);
 	irq_initialize_vectors();
 	AVR32_TC.channel[1].cmr = AVR32_TC_WAVE_MASK
 						    | AVR32_TC_WAVSEL_UP_AUTO_MASK
 							| AVR32_TC_CPCSTOP_MASK
-							| AVR32_TC_TIMER_CLOCK5;
+							| AVR32_TC_TIMER_CLOCK1;
 	AVR32_TC.channel[1].ier = AVR32_TC_IER1_CPCS_MASK;
 	// TIMER_CLOCK1 is 32KHz crystal which is not running yet? try PBA/32
 	set_timer1(100);
