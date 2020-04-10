@@ -1,3 +1,6 @@
 [submodule "TestAtmel/src/TimbreOS"]
 	path = TestAtmel/src/TimbreOS
 	url = https://github.com/strawbot/EmbeddedTimbre.git
+[submodule "TestAtmel/src/sfp"]
+	path = TestAtmel/src/sfp
+	url = https://github.com/strawbot/sfp.git
