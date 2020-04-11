@@ -273,7 +273,7 @@ static void al200Board_init() {
 
     //reset, disable and MAP the module pins (SPI)
     RTCMEM_SPI->cr = AVR32_SPI_CR_SWRST_MASK;
-    ; // software reset on SPI
+    // software reset on SPI
     RTCMEM_SPI->cr = AVR32_SPI_CR_SPIDIS_MASK;
     //init_map_RTCMEM_spi(); // RTC (and ADC (uses G2010 MEM CS0))
 
@@ -340,11 +340,10 @@ void init_start_gclk_uart3(void) {
 
 void init_hw() {
     al200Board_init();
-	redOn();
-	const char * banner = "Good Mornin!";
+    irq_initialize_vectors();
+    INTC_init_interrupts();
+	const char * banner = "AL200 Rebuild ";
 	while (*banner) usart_serial_putchar(CONSOLE, *banner++);
-	redOff();
-    init_leds();
 }
 
 void console() {

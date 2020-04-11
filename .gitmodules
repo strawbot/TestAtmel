@@ -4,3 +4,6 @@
 [submodule "TestAtmel/src/sfp"]
 	path = TestAtmel/src/sfp
 	url = https://github.com/strawbot/sfp.git
+[submodule "TestAtmel/src/SFP"]
+	path = TestAtmel/src/SFP
+	url = https://github.com/strawbot/sfp.git
