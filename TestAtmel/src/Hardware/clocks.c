@@ -1,29 +1,3 @@
-#include "tea.h"
-#include "gpio.h"
-#include "printers.h"
-// #include "statCtrs.h"
-#include "cli.h"
-#include "rtc.h"
-#include "tc.h"
-#include "sysclk.h"
-#include "pm.h"
-#include "intc.h"
-
-void over_due() { /* incCtr(overDueTea); */ }
-
-Event alarmEvent;
-
-Long raw_time() { return rtc_get_value(&AVR32_RTC); }
-
-// RTC is run from 32Khz/32 clock. TC is run by 32Khz clock. 
-#define RTC_SCALE 32
-
-void set_alarm(Long t) {
-    Wr_bitfield(AVR32_TC.channel[0].rc, AVR32_TC_RC_MASK, t * RTC_SCALE);
-	AVR32_TC.channel[0].ccr = AVR32_TC_SWTRG_MASK;
-	(void) AVR32_TC.channel[0].ccr;
-}
-
 // Clocks
 /*
  RTC is used as a free running ms counter. Its clock is the 32KHz/32 so it gets 1024 ticks/second
@@ -54,6 +28,32 @@ void set_alarm(Long t) {
 	corresponding interrupt level is automatically masked by IxM (unless IxM
 	is explicitly cleared by the software).
 */
+
+#include "tea.h"
+#include "gpio.h"
+#include "printers.h"
+// #include "statCtrs.h"
+#include "cli.h"
+#include "rtc.h"
+#include "tc.h"
+#include "sysclk.h"
+#include "pm.h"
+#include "intc.h"
+
+// RTC is run from 32Khz/32 clock. TC is run by 32Khz clock. 
+#define RTC_SCALE 32
+
+void over_due() { /* incCtr(overDueTea); */ }
+
+Event alarmEvent;
+
+Long raw_time() { return rtc_get_value(&AVR32_RTC); }
+
+void set_alarm(Long t) {
+    Wr_bitfield(AVR32_TC.channel[0].rc, AVR32_TC_RC_MASK, t * RTC_SCALE);
+	AVR32_TC.channel[0].ccr = AVR32_TC_SWTRG_MASK;
+	(void) AVR32_TC.channel[0].ccr;
+}
 
 static int counts = 0;
 ISR(TIMER_IRQ, 14, 0) {

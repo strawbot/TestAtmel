@@ -3,46 +3,11 @@
 #include "conf_clock.h"
 #include "init_hw.h"
 #include <asf.h>
+#include "project_defs.h"
+
+void system_failure() { safe( redOn(); while (true); ) } // DEBUGGING
 
 void init_leds();
-
-/*	static const gpio_map_t USART_GPIO_MAP =
-	{
-		{EXAMPLE_USART_RX_PIN, EXAMPLE_USART_RX_FUNCTION},
-		{EXAMPLE_USART_TX_PIN, EXAMPLE_USART_TX_FUNCTION}
-	};
-
-	// USART options.
-	static const usart_options_t USART_OPTIONS =
-	{
-		.baudrate     = 57600,
-		.charlength   = 8,
-		.paritytype   = USART_NO_PARITY,
-		.stopbits     = USART_1_STOPBIT,
-		.channelmode  = USART_NORMAL_CHMODE
-	};
-
-	// Assign GPIO to USART.
-	gpio_enable_module(USART_GPIO_MAP,
-	sizeof(USART_GPIO_MAP) / sizeof(USART_GPIO_MAP[0]));
-
-	// Initialize USART in RS232 mode.
-	usart_init_rs232(EXAMPLE_USART, &USART_OPTIONS, EXAMPLE_TARGET_PBACLK_FREQ_HZ);
-
-	// Hello world!
-	usart_write_line(EXAMPLE_USART, "Hello, this is the AVR UC3 MCU saying hello! (press enter)\r\n");
-
-	// Press enter to continue.
-	while (usart_get_echo_line(EXAMPLE_USART) == USART_FAILURE);  // Get and echo characters until end of line.
-
-	usart_write_line(EXAMPLE_USART, "Goodbye.\r\n"); */
-
-static usart_serial_options_t usart_options = {
-	.baudrate = 115200,
-	.charlength = 8,
-	.paritytype = USART_NO_PARITY,
-	.stopbits = USART_1_STOPBIT
-};
 
 void init_map_uart0(void) {
     // define UART0 pin mapping, RX and TX pins as function
@@ -81,17 +46,6 @@ void init_map_uart2(void) {
 }
 /*************************************************************************************
  */
-void init_map_uart3(void) {
-    // define UART3 pin mapping, RX and TX pins as function
-    static const gpio_map_t USART_GPIO_MAP3 = {
-        { AVR32_USART3_RXD_0_0_PIN, AVR32_USART3_RXD_0_0_FUNCTION },
-        { AVR32_USART3_TXD_0_0_PIN, AVR32_USART3_TXD_0_0_FUNCTION },
-        { AVR32_USART3_CLK_0_PIN, AVR32_USART3_CLK_0_FUNCTION }
-    };
-
-    gpio_enable_module(USART_GPIO_MAP3, sizeof(USART_GPIO_MAP3) / sizeof(USART_GPIO_MAP3[0]));
-}
-
 static void al200Board_init() {
 	pm_switch_to_osc0(pm, FOSC0, OSC0_STARTUP);
 	pm_pll_disable(pm, 0);
@@ -138,11 +92,6 @@ static void al200Board_init() {
     gpio_enable_gpio_pin(CSI_SWI_IN); //switch closure input
     gpio_enable_gpio_pin(CSI_BUTTON_IN); //button input
 
-    //CSI Wakeups (external interrupts)
-    // gpio_enable_gpio_pin(CSI_INT_XTIMER); //RTC wakeup
-    // gpio_enable_gpio_pin(CSI_INT_U1_RX); //UART 1 RX wakeup
-    // gpio_enable_gpio_pin(CSI_INT_U1_IVLD); //UART 1 INVALID wakeup
-
     //CSI 9pin I/O
     gpio_clr_gpio_pin(CSI_DL_TXD_EN); //CSI/O DL TXD enable (active HI)
     gpio_enable_gpio_pin(CSI_DL_SDE_N); //CSI/O SDE input (active LO)
@@ -164,15 +113,6 @@ static void al200Board_init() {
     gpio_enable_gpio_pin(U0_RX); // RX as input
     gpio_clr_gpio_pin(U0_TX); // TX as output, value 0
     gpio_enable_pin_pull_up(U0_TX); // *** erata claims this is needed if UART module is turned off***
-    //U0_SDN_N pin is NC on A200
-    //	gpio_clr_gpio_pin(U0_SDN_N);	// RS232 driver shutdown as output, value 0 (shutdown)
-    //U0_RTS pin is NC on A200
-    //	gpio_clr_gpio_pin(U0_RTS);		// RTS as output, value 0
-    //U0_CTS pin is NC on A200
-    //	gpio_enable_gpio_pin(U0_CTS);	// CTS as input
-    //U0_INVLD_N pin is NC on A200; should be USB_VBOF anyways
-    //	gpio_enable_gpio_pin(U0_INVLD_N);	// RS232 driver invalid output as input
-    //~BUF_DL_CLK on A200 (still an input)
     gpio_enable_gpio_pin(U0_EXTCLK);
 
     // UART3 lines
@@ -222,27 +162,6 @@ static void al200Board_init() {
     gpio_clr_gpio_pin(R_CH_SEL); // channel select driver, output value 0 to turn transistor off,
         //     floating the Radio Channel Select output.
 
-    // Unconnected I/O
-    // Recent spec sheet stated lowest power is
-    // to leave unused pins as inputs(as defined by reset)
-    // but enable the pull ups.
-    // PA all pins used, no unconnected pins
-    /*
-	// PB... 6 pins
-//SDI12_EN_TX on A200
-	gpio_enable_pin_pull_up(AVR32_PIN_PB02);
-//EN_4_20MA on A200
-	gpio_enable_pin_pull_up(AVR32_PIN_PB03);
-//SEL_CHC on A200
-	gpio_enable_pin_pull_up(AVR32_PIN_PB13);
-//TC_CLK2 on A200
-	gpio_enable_pin_pull_up(AVR32_PIN_PB14);
-//SW_12V_EN on A200
-	gpio_enable_pin_pull_up(AVR32_PIN_PB20);		// UART Clock
-//EN_5.2V on A200
-	gpio_enable_pin_pull_up(AVR32_PIN_PB24);
-*/
-
     //CSI unconnected I/O
     //	gpio_enable_pin_pull_up(AVR32_PIN_PA19);	//test point on G2010; driven LO; NC on A200
     gpio_clr_gpio_pin(U0_SDN_N); // RS232 driver shutdown as output, value 0 (shutdown); not used on CSI (PA26)
@@ -257,10 +176,6 @@ static void al200Board_init() {
     //	gpio_enable_pin_pull_up(AVR32_PIN_PA04);
     gpio_enable_gpio_pin(AVR32_PIN_PA04); //tied to GND
 
-    // PC... 2 pins
-    //	gpio_enable_pin_pull_up(AVR32_PIN_PC01);	// used for CSI_DL_RING_EN on Rev1
-    //	gpio_enable_pin_pull_up(AVR32_PIN_PC04);	//used for CSI_RF_CS_N on Rev1
-
     // reset and then MAP the module pins (UARTS)
     usart_reset(&AVR32_USART0);
     init_map_uart0(); // uart0
@@ -268,8 +183,6 @@ static void al200Board_init() {
     init_map_uart1(); // uart1
     usart_reset(&AVR32_USART2);
     init_map_uart2(); // gps uart (uart2)
-    usart_reset(&AVR32_USART3);
-    init_map_uart3(); // uart3 (console)
 
     //reset, disable and MAP the module pins (SPI)
     RTCMEM_SPI->cr = AVR32_SPI_CR_SWRST_MASK;
@@ -279,11 +192,6 @@ static void al200Board_init() {
 
     DAC_SPI->cr = AVR32_SPI_CR_SWRST_MASK; // software reset on SPI
     DAC_SPI->cr = AVR32_SPI_CR_SPIDIS_MASK;
-    //init_map_DAC_spi(); // DAC for transmitter output
-    /**********************************************************************
-* Function: init_map_DAC_spi()
-* Description: map the module pins for the RCT/EEPROM SPI 
-* **********************************************************************/
     // setup SPI for DAC
     static const gpio_map_t DAC_SPI_GPIO_MAP = {
         { DAC_SPI_SCK_PIN, DAC_SPI_SCK_FUNCTION }, // SPI clock
@@ -294,59 +202,16 @@ static void al200Board_init() {
     // assign I/Os to DAC_SPI
     gpio_enable_module(DAC_SPI_GPIO_MAP, sizeof(DAC_SPI_GPIO_MAP) / sizeof(DAC_SPI_GPIO_MAP[0]));
 
-    if (gpio_get_pin_value(CSI_GPS_WU)) { //GPS wakeup output; HI when powered; LO when sleeping
+    // if (gpio_get_pin_value(CSI_GPS_WU)) { //GPS wakeup output; HI when powered; LO when sleeping
         gpio_set_gpio_pin(GPS_ON);
-        delay_ms(100);
-        gpio_clr_gpio_pin(GPS_ON); // GPS power ON
-        delay_ms(500); //wait for GPS to be ready to accept input
-    }
-
-    usart_serial_init(CONSOLE, &usart_options);
-}
-
-/*************************************************************************************
- * setup UART3 for gclk input
- * leave at defaults:
- * SYNC/CPHA = 0 - asynchronous mode
- * MODE9 = 0 - not in 9 bit mode
- * CLKO = 0 - don't put clock on SCK pin
- * OVER = 1 for 8x oversampling for 800 kHz clock
- * INACK, DSNACK, VAR_SYNC, MAX_ITERATION, 
- * FILTER, MAN, MODSYNC, ONEBIT = default (0)
- */
-void init_start_gclk_uart3(void) {
-    // stop, reset all flags, disable ints
-    //usart_reset(&AVR32_USART3);
-    // for 800 kHz external clock, set the oversample rate to 8 instead of 16
-    (&AVR32_USART3)->mr |= AVR32_USART_OVER_X8 << AVR32_USART_OVER_OFFSET;
-// set the baud rate whole and fractional divisor for the input gclk
-    (&AVR32_USART3)->brgr = (U16)(GCLK_UART_CD_57_6) << AVR32_USART_BRGR_CD_OFFSET | (U16)(GCLK_UART_FP_57_6) << AVR32_USART_BRGR_FP_OFFSET;
-    // set clock to external SCK pin
-    (&AVR32_USART3)->mr &= ~(AVR32_USART_USCLKS_SCK << AVR32_USART_USCLKS_OFFSET);
-    // char len 8
-    (&AVR32_USART3)->mr |= (8 - 5) << AVR32_USART_MR_CHRL_OFFSET;
-    // no parity
-    (&AVR32_USART3)->mr |= USART_NO_PARITY << AVR32_USART_MR_PAR_OFFSET;
-    // set normal channel mode (not local echo, etc)
-    (&AVR32_USART3)->mr |= 0 << AVR32_USART_MR_CHMODE_OFFSET;
-    // set 1 stop bit
-    (&AVR32_USART3)->mr |= USART_1_STOPBIT << AVR32_USART_MR_NBSTOP_OFFSET;
-    // set normal usart mode (not RS485, IrDa, etc.)
-    (&AVR32_USART3)->mr = ((&AVR32_USART3)->mr & ~AVR32_USART_MR_MODE_MASK) | AVR32_USART_MR_MODE_NORMAL << AVR32_USART_MR_MODE_OFFSET;
-    // Setup complete; enable communication.
-    // Enable input and output.
-    (&AVR32_USART3)->cr = AVR32_USART_CR_RXEN_MASK | AVR32_USART_CR_TXEN_MASK;
+    //     delay_ms(100);
+    //     gpio_clr_gpio_pin(GPS_ON); // GPS power ON
+    //     delay_ms(500); //wait for GPS to be ready to accept input
+    // }
 }
 
 void init_hw() {
     al200Board_init();
     irq_initialize_vectors();
     INTC_init_interrupts();
-	const char * banner = "AL200 Rebuild ";
-	while (*banner) usart_serial_putchar(CONSOLE, *banner++);
-}
-
-void console() {
-	if (CONSOLE->CSR.rxrdy == 1)
-		CONSOLE->THR.txchr = CONSOLE->RHR.rxchr;
 }

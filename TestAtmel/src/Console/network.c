@@ -64,7 +64,7 @@ void output() { // called from safeEmit when emitq is full
 // interrupt driven sfp
 void frameOut(sfpFrame * frame) {
     (void)frame;
-    // USART_IntEnable(CONSOLE_PORT, USART_IEN_TXBL);
+    tx_enable();
 }
 
 static bool sfpTXStates() {
@@ -120,7 +120,7 @@ static void sfpStateMachine() {
 
 static void service_tx(sfpLink_t * link) {
 	if (qbq(link->txq) || link->sfpBytesToTx) { 
-		// if (uart_idle()) console_enable_tx();
+		if (uart_idle()) console_enable_tx();
 	}
 }
 
@@ -167,7 +167,7 @@ void initSfp(void)
 	link = &uartLink;
 	initLink(link, "UART Link");
 	link->disableSps = true;
-	// console_sfp(link);
+	console_sfp(link);
 
 	// initialize state machines
 	initSfpRxSM(link, frameq);
@@ -182,7 +182,7 @@ void initSfp(void)
 	initTalkHandler();
 
 	when(RxFrame, processFrames);
-	// when(ConsoleRxChar, scheduleRxSM);
+	when(ConsoleRxChar, scheduleRxSM);
 	when(EmitEvent, emitMachine);
 	when(NpsEvent, sfpStateMachine);
 }

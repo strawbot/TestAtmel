@@ -17,26 +17,21 @@ void greenOff() { gpio_clr_gpio_pin(U0_IN_LED); }
 bool redOn()    { gpio_set_gpio_pin(U1_IN_LED); return true; }
 bool redOff()   { gpio_clr_gpio_pin(U1_IN_LED); return false; }
 
-static void toggle_red() {
-	static bool on = false;
-	on = on ? redOff() : redOn();
-}
-
 #define sleeping() false
 
 // board led
-static void blink_led() { greenOn();  after(msec(5), greenOff); }
+static void blink_led() { greenOn();  in(msec(5), greenOff); }
 
 void im_alive() {
 	blink_led();
-	after(msec(200), blink_led);
+	in(msec(200), blink_led);
 
 	Long period = sleeping()? 5 : 1;
-	after(secs(period), im_alive);
+	in(secs(period), im_alive);
 }
 
 void init_leds() {
 	redOff();
 	greenOff();
-	im_alive();
+	later(im_alive);
 }

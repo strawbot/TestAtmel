@@ -2,8 +2,12 @@
 #include "tea.h"
 #include "intc.h"
 
+void init_leds();
+void init_console();
+
 void init_apps() {
 	init_leds();
+	init_console();
 	Enable_global_interrupt();
 }
 
