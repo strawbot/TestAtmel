@@ -24,7 +24,8 @@ Event ConsoleTxDone, ConsoleRxChar;
 
 static Long last_activity = 0;
 
-//static void note_activity() { last_activity = raw_time(); }
+static void note_activity() { last_activity = getTime(); }
+
 /*
 TXRDY TXEMP txqQu State  action
 1		1	1	transfer 1 byte
@@ -38,7 +39,7 @@ TXRDY TXEMP txqQu State  action
 0		1	0	cant happen
 
 */
-ISR(CONSOLE_IRQHandler, 8, 0) {
+ISR(CONSOLE_IRQHandler, 8, 1) {
 	Long status = CONSOLE->csr;
 	Long interrupts = status & CONSOLE->imr;
 
@@ -46,7 +47,17 @@ ISR(CONSOLE_IRQHandler, 8, 0) {
 		pushbq(CONSOLE->RHR.rxchr, uartRxq);
 		CONSOLE->ier = AVR32_USART_CSR_TXRDY_MASK;
 		now(*ConsoleRxChar);
+//		record_event(FIRST_EVENT);
 	}
+	// The XXXX bit is cleared by writing the Control Register (CR) with the RSTSTA (Reset Status) bit at 1
+	if (status & AVR32_USART_CSR_RXBRK_MASK)
+	record_event("RXBRK"), CONSOLE->cr = AVR32_USART_CR_RSTSTA;
+	if (status & AVR32_USART_CSR_PARE_MASK)
+	record_event("PARE"), CONSOLE->cr = AVR32_USART_CR_RSTSTA;
+	if (status & AVR32_USART_CSR_OVRE_MASK)
+	record_event("OVRE"), CONSOLE->cr = AVR32_USART_CR_RSTSTA;
+	if (status & AVR32_USART_CSR_FRAME_MASK)
+	record_event("FRAME"), CONSOLE->cr = AVR32_USART_CR_RSTSTA;
 
 	if (qbq(uartTxq)) {
 		if (status & AVR32_USART_CSR_TXRDY_MASK)
@@ -64,18 +75,10 @@ ISR(CONSOLE_IRQHandler, 8, 0) {
 			now(*ConsoleTxDone);
 		}
 	}
+	note_activity();
 }
 
 
-	// The XXXX bit is cleared by writing the Control Register (CR) with the RSTSTA (Reset Status) bit at 1
-	// if (status & AVR32_USART_CSR_RXBRK_MASK)
-	// 	;
-	// if (status & AVR32_USART_CSR_PARE_MASK)
-	// 	; 
-	// if (status & AVR32_USART_CSR_OVRE_MASK)
-	// 	;
-	// if (status & AVR32_USART_CSR_FRAME_MASK)
-	// 	;
 
 // 	if (USART_StatusGet(CONSOLE_PORT) & USART_STATUS_RXDATAV) {
 // 		pushbq(USART_RxDataGet(CONSOLE_PORT), uartRxq);
@@ -119,7 +122,7 @@ ISR(CONSOLE_IRQHandler, 8, 0) {
 static bool pending_finish = false;
 
 static void checking_console() {
-	if (2 * ONE_SECOND < raw_time() - last_activity) {
+	if (2 * ONE_SECOND < getTime() - last_activity) {
 		pending_finish = false;
 		// enable_even_irq();
 	} else
@@ -217,7 +220,7 @@ void init_map_uart3(void) {
 }
 
 static usart_serial_options_t usart_options = {
-	.baudrate = 115200,
+	.baudrate = 1200, // 115200,
 	.charlength = 8,
 	.paritytype = USART_NO_PARITY,
 	.stopbits = USART_1_STOPBIT
@@ -249,6 +252,6 @@ void init_console() {
 	init_cli();
 	CONSOLE->ier = AVR32_USART_CSR_RXRDY_MASK;
 
-	INTC_register_interrupt(&CONSOLE_IRQHandler, AVR32_USART3_IRQ, AVR32_INTC_INT0);
+	INTC_register_interrupt(&CONSOLE_IRQHandler, AVR32_USART3_IRQ, AVR32_INTC_INT1);
 }
 

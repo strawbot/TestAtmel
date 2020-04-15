@@ -7,7 +7,7 @@
 // one second of raw time for reference and conversions Crystal is 32.768KHz; prescaler /32
 #define ONE_SECOND 1024
 
-Long raw_time();
+Long raw_time(); // ticks proportional to milliseconds
 void show_timer();
 void init_clocks(void);
 void set_alarm(Long t);

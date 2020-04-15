@@ -96,10 +96,10 @@ static void init_tc() {
 void show_timer() {
 	print("CNT:");
 	dotnb(4, 4, raw_time(), 16);
-	print("  Timer:");
-	dotnb(4, 4, AVR32_TC.channel[1].cv, 16);
 	print("  ticks/S:");
 	printDec(ONE_SECOND);
+	print("  Timer:");
+	dotnb(4, 4, AVR32_TC.channel[1].cv, 16);
 }
 
 void get_clock_frequency() {

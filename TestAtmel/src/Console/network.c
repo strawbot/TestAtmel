@@ -87,6 +87,7 @@ static bool sfpTXStates() {
 static bool rxSmPending = false;
 
 static void consoleRxSM() {
+	RE();
 	sfpLink_t * link = &uartLink;
 
 	while (link->sfpRx(link)) 
@@ -96,6 +97,7 @@ static void consoleRxSM() {
 }
 
 static void scheduleRxSM() {
+	RE();
 	if (!rxSmPending) {
         later(consoleRxSM);
         rxSmPending = true;
