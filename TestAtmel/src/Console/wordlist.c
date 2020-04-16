@@ -20,6 +20,24 @@ void cii(void);
 
 // Words
 NAMES(wordnames)
+	NAME("uptime")		//  print running time in seconds
+//	setdate setTimeDate // ( Y M D h m s day ) set date and time and day (of week)
+//	date printTimeDate // print date and time and day of week
+//    viewcal viewCalibrateClock // view calibration of high freq. RC oscillator
+//    syncinterval setTimeSync // (n) set time sync interval for n seconds
+//    timeinterrupts cliTimeInterrupts // (f) set to true to enable interrupt timing
+//    testudm testUserDataMemory // test the user data memory
+//    quote testPostQuote // <["]string["]> test post quote function; quotes optional
+//	pp printPins // print all the pins with names, levels, mode
+	NAME("te")		//  print counter, compare value and list of actions and due dates
+	NAME("pa")		//  print actions in queue
+	NAME("tn")		//  dump out names in action name arraye
+	NAME("mstats")		//  list stats for machines
+	NAME("0stats")		//  initialize stats to zero
+	NAME("testtime")		//  ( s ) test ticks, timeouts and time for s seconds
+	NAME("tickms")		//  ( tick - ms ) convert tick to milliseconds
+	NAME("gtt")		//  print tick and time
+	NAME("freq")		//  get high frequency clock in MHz
 	NAME("help")		//  print words with one line help; allow wild card filtering; parenthesis show ( args - results ) and precede the command; angle brackets show arguments that follow commands
 	NAME("words")		//  list all words in dictionary
 	NAME("dup")		//  ( n - n n ) make a copy of the top data stack item
@@ -96,6 +114,24 @@ NAMES(wordnames)
 	NAME("]")		//  enter macro mode
 END_NAMES
 
+void printUptime(void);
+//	setdate setTimeDate // ( Y M D h m s day ) set date and time and day (of week)
+//	date printTimeDate // print date and time and day of week
+//    viewcal viewCalibrateClock // view calibration of high freq. RC oscillator
+//    syncinterval setTimeSync // (n) set time sync interval for n seconds
+//    timeinterrupts cliTimeInterrupts // (f) set to true to enable interrupt timing
+//    testudm testUserDataMemory // test the user data memory
+//    quote testPostQuote // <["]string["]> test post quote function; quotes optional
+//	pp printPins // print all the pins with names, levels, mode
+void print_te(void);
+void print_actions(void);
+void dumpTeaNames(void);
+void machineStats(void);
+void zeroMachineTimes(void);
+void test_time(void);
+void ticks_ms(void);
+void get_tick_time(void);
+void get_clock_frequency(void);
 void help(void);
 void words(void);
 void dup(void);
@@ -172,6 +208,24 @@ void variable(void);
 void righBracket(void);
 
 BODIES(wordbodies)
+	BODY(printUptime)
+//	setdate setTimeDate // ( Y M D h m s day ) set date and time and day (of week)
+//	date printTimeDate // print date and time and day of week
+//    viewcal viewCalibrateClock // view calibration of high freq. RC oscillator
+//    syncinterval setTimeSync // (n) set time sync interval for n seconds
+//    timeinterrupts cliTimeInterrupts // (f) set to true to enable interrupt timing
+//    testudm testUserDataMemory // test the user data memory
+//    quote testPostQuote // <["]string["]> test post quote function; quotes optional
+//	pp printPins // print all the pins with names, levels, mode
+	BODY(print_te)
+	BODY(print_actions)
+	BODY(dumpTeaNames)
+	BODY(machineStats)
+	BODY(zeroMachineTimes)
+	BODY(test_time)
+	BODY(ticks_ms)
+	BODY(get_tick_time)
+	BODY(get_clock_frequency)
 	BODY(help)
 	BODY(words)
 	BODY(dup)

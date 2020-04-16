@@ -38,6 +38,7 @@ void help(void) {
     printif(".s   print number of items on data stack and items\n");
     printif("/   ( n m - q ) divide next data stack item by top and leave on top\n");
     printif("/mod   ( n m - q r ) return divide and modulus from top item into next item\n");
+    printif("0stats   initialize stats to zero\n");
     printif(":   start a macro definition\n");
     printif(";  [i]  end a macro\n");
     printif("<   ( n m - f ) leave a boolean on stack indicating if next is less than top\n");
@@ -73,6 +74,8 @@ void help(void) {
     printif("exit  [i]  exit macro\n");
     printif("fill   ( s n x - )fill n bytes from s with x\n");
     printif("for  [i]  ( n - ) start of a loop which runs n times\n");
+    printif("freq   get high frequency clock in MHz\n");
+    printif("gtt   print tick and time\n");
     printif("help   print words with one line help; allow wild card filtering; parenthesis show ( args - results ) and precede the command; angle brackets show arguments that follow commands\n");
     printif("here   ( - a ) return address of end of dictionary\n");
     printif("hex   interpret all following numbers as hex\n");
@@ -83,12 +86,14 @@ void help(void) {
     printif("max   ( n m - n|m) leave maximum of top two stack items\n");
     printif("min    ( n m - n|m) leave minimum of top two stack items\n");
     printif("mod   ( n m - r ) modulus next data stack item by top and leave on top\n");
+    printif("mstats   list stats for machines\n");
     printif("negate   ( n - -n ) two's complement of top data stack item\n");
     printif("next  [i]  end of a for loop\n");
     printif("not   ( n - n' ) invert all bits on the top data stack item\n");
     printif("oct   switch to octal numbers\n");
     printif("or    ( n m - p ) bitwise OR top two data stack items and leave on top\n");
     printif("over   ( n m - n m n ) copy 2nd data stack item to top of data stack\n");
+    printif("pa   print actions in queue\n");
     printif("r   ( - n ) (R n - n ) copy the top item of the return stack onto the data stack\n");
     printif("r>    ( - n ) (R n - ) move top item on return stack to data stack\n");
     printif("repeat  [i]  go back to the begin part\n");
@@ -100,8 +105,13 @@ void help(void) {
     printif("sp!   ( ... - ) empty the data stack\n");
     printif("strlen   ( a - c ) return length of a string\n");
     printif("swap   ( n m - m n ) swap top two items on the data stack\n");
+    printif("te   print counter, compare value and list of actions and due dates\n");
+    printif("testtime   ( s ) test ticks, timeouts and time for s seconds\n");
+    printif("tickms   ( tick - ms ) convert tick to milliseconds\n");
+    printif("tn   dump out names in action name arraye\n");
     printif("type   ( a n - ) output n characters starting at a\n");
     printif("until  [i]  ( n - ) go back to the begin statement if stack is zero\n");
+    printif("uptime   print running time in seconds\n");
     printif("variable   ( n - ) give n a place to be stored at a name\n");
     printif("while  [i]  ( n - ) conditional choice in a loop construct\n");
     printif("words   list all words in dictionary\n");

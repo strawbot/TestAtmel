@@ -220,7 +220,7 @@ void init_map_uart3(void) {
 }
 
 static usart_serial_options_t usart_options = {
-	.baudrate = 1200, // 115200,
+	.baudrate = 57600, // 115200,
 	.charlength = 8,
 	.paritytype = USART_NO_PARITY,
 	.stopbits = USART_1_STOPBIT

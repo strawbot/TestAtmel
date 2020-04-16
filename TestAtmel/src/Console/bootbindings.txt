@@ -21,6 +21,24 @@
 
 
 Words
+    uptime printUptime // print running time in seconds
+//	setdate setTimeDate // ( Y M D h m s day ) set date and time and day (of week)
+//	date printTimeDate // print date and time and day of week
+//    viewcal viewCalibrateClock // view calibration of high freq. RC oscillator
+//    syncinterval setTimeSync // (n) set time sync interval for n seconds
+//    timeinterrupts cliTimeInterrupts // (f) set to true to enable interrupt timing
+//    testudm testUserDataMemory // test the user data memory
+//    quote testPostQuote // <["]string["]> test post quote function; quotes optional
+//	pp printPins // print all the pins with names, levels, mode
+	te print_te // print counter, compare value and list of actions and due dates
+	pa print_actions // print actions in queue
+	tn dumpTeaNames // dump out names in action name arraye
+	mstats machineStats // list stats for machines
+	0stats zeroMachineTimes // initialize stats to zero
+	testtime test_time // ( s ) test ticks, timeouts and time for s seconds
+	tickms ticks_ms // ( tick - ms ) convert tick to milliseconds
+	gtt get_tick_time // print tick and time
+	freq get_clock_frequency // get high frequency clock in MHz
 End
 
 Include ../TimbreOS/WordLists/clibindings.txt
